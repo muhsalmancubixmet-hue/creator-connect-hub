@@ -55,7 +55,11 @@ export function convert(amount: number, from: CurrencyCode, to: CurrencyCode) {
 }
 export const toUSD = (amount: number, from: CurrencyCode) => convert(amount, from, "USD");
 
-export function formatMoney(amount: number, from: CurrencyCode = DEFAULT_CURRENCY, to?: CurrencyCode) {
+export function formatMoney(
+  amount: number,
+  from: CurrencyCode = DEFAULT_CURRENCY,
+  to?: CurrencyCode,
+) {
   const target = to ?? display;
   return new Intl.NumberFormat(CURRENCIES[target].locale, {
     style: "currency",

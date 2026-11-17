@@ -4,13 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth-context";
 
@@ -44,10 +45,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     error?.message?.includes("Failed to fetch dynamically imported module") ||
     error?.message?.includes("Importing a module script failed") ||
     error?.message?.includes("dynamically imported module");
-
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   useEffect(() => {
     if (isDynamicImportError && typeof window !== "undefined") {
@@ -155,8 +152,30 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+const PUBLIC_PATHS = ["/login", "/signup"];
+
+/** Strict session guard: sends unauthenticated business visitors to /login */
+function useBusinessGuard(isPublic: boolean) {
+  const navigate = useNavigate();
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    if (isPublic) return;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("business_access_token") : null;
+    if (token) {
+      setOk(true);
+    } else {
+      void navigate({ to: "/login", replace: true });
+    }
+  }, [isPublic, navigate]);
+  return ok;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+  const authed = useBusinessGuard(isPublic);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -174,10 +193,31 @@ function RootComponent() {
     return () => window.removeEventListener("vite:preloadError", onPreloadError);
   }, []);
 
+  if (isPublic) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Outlet />
+          <Toaster position="top-right" richColors />
+        </AuthProvider>
+      </QueryClientProvider>
+    );
+  }
+
+  if (!authed) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background">
+        <span
+          className="size-8 animate-spin rounded-full border-2 border-primary border-t-transparent"
+          aria-label="Authenticating business account..."
+        />
+      </div>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <Toaster position="top-right" richColors />
       </AuthProvider>

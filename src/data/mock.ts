@@ -177,7 +177,14 @@ const img = (seed: string) => `https://picsum.photos/seed/${seed}/800/800`;
 const face = (n: number) => `https://i.pravatar.cc/400?img=${n}`;
 
 function portfolioFor(seed: string) {
-  const types: ("Image" | "Reel" | "Video")[] = ["Reel", "Image", "Image", "Video", "Image", "Reel"];
+  const types: ("Image" | "Reel" | "Video")[] = [
+    "Reel",
+    "Image",
+    "Image",
+    "Video",
+    "Image",
+    "Reel",
+  ];
   const captions = [
     "Brand collaboration shoot",
     "Campaign work for a local brand",
@@ -629,7 +636,11 @@ const demoKeralaCreators: DemoCreator[] = [
     },
     collaborations: [{ brand: "Punnamada Houseboats", work: "Photo set", year: 2025 }],
     testimonials: [
-      { business: "Punnamada Houseboats", quote: "Our booking page finally looks premium.", rating: 5 },
+      {
+        business: "Punnamada Houseboats",
+        quote: "Our booking page finally looks premium.",
+        rating: 5,
+      },
     ],
     mediaKit: "aiswarya-suresh-mediakit.pdf",
   },
@@ -672,7 +683,9 @@ const demoKeralaCreators: DemoCreator[] = [
       authenticity: 84,
     },
     collaborations: [{ brand: "Level Up Cafe", work: "Stream takeover", year: 2025 }],
-    testimonials: [{ business: "Level Up Cafe", quote: "Packed the cafe on a weekday.", rating: 4 }],
+    testimonials: [
+      { business: "Level Up Cafe", quote: "Packed the cafe on a weekday.", rating: 4 },
+    ],
     mediaKit: "hari-sankar-mediakit.pdf",
   },
   {
@@ -769,7 +782,18 @@ const demoKeralaCreators: DemoCreator[] = [
 const KERALA_CITY: Record<string, string> = { "Ernakulam (Kochi)": "Kochi", Wayanad: "Kalpetta" };
 
 function globalCreator(
-  p: Pick<DemoCreator, "id" | "name" | "handle" | "category" | "bio" | "mainPlatform" | "followers" | "engagement" | "startingPrice"> & {
+  p: Pick<
+    DemoCreator,
+    | "id"
+    | "name"
+    | "handle"
+    | "category"
+    | "bio"
+    | "mainPlatform"
+    | "followers"
+    | "engagement"
+    | "startingPrice"
+  > & {
     face: number;
     city: string;
     currency: CurrencyCode;
@@ -815,9 +839,25 @@ function globalCreator(
       engagement: +(p.engagement - i * 0.8).toFixed(1),
     })),
     portfolio: portfolioFor(p.id),
-    audience: { female: 58, male: 42, topAge: "25-34", topCities: p.serviceAreas.slice(0, 3), authenticity: 91 },
-    collaborations: p.brands.map((brand, i) => ({ brand, work: i ? "Campaign content" : "Launch series", year: 2025 - i })),
-    testimonials: [{ business: p.brands[0] ?? "Brand partner", quote: "Clear communication and content that converted.", rating: 5 }],
+    audience: {
+      female: 58,
+      male: 42,
+      topAge: "25-34",
+      topCities: p.serviceAreas.slice(0, 3),
+      authenticity: 91,
+    },
+    collaborations: p.brands.map((brand, i) => ({
+      brand,
+      work: i ? "Campaign content" : "Launch series",
+      year: 2025 - i,
+    })),
+    testimonials: [
+      {
+        business: p.brands[0] ?? "Brand partner",
+        quote: "Clear communication and content that converted.",
+        rating: 5,
+      },
+    ],
     mediaKit: `${p.id}-mediakit.pdf`,
     geo,
     currency: p.currency,
@@ -828,12 +868,120 @@ function globalCreator(
 }
 
 const demoGlobalCreators: Creator[] = [
-  globalCreator({ id: "c13", name: "Layla Haddad", handle: "@layla.wears", face: 47, city: "Dubai", currency: "AED", category: "Fashion", secondary: ["Lifestyle", "Beauty"], languages: ["Arabic", "English"], bio: "Modest fashion and Gulf street style.", mainPlatform: "Instagram", platforms: ["Instagram", "TikTok"], followers: 412000, engagement: 4.8, startingPrice: 3500, serviceAreas: ["Dubai", "Abu Dhabi", "Sharjah", "Remote / Worldwide"], brands: ["Dubai Mall Style Week", "Namshi"] }),
-  globalCreator({ id: "c14", name: "Oliver Grant", handle: "@olivereatslondon", face: 59, city: "London", currency: "GBP", category: "Food", secondary: ["Lifestyle"], languages: ["English"], bio: "Hidden London food spots in 60 seconds.", mainPlatform: "TikTok", platforms: ["TikTok", "Instagram", "YouTube"], followers: 268000, engagement: 5.9, startingPrice: 650, serviceAreas: ["London", "Manchester", "Remote / Worldwide"], brands: ["Borough Bites", "Deliveroo"] }),
-  globalCreator({ id: "c15", name: "Maya Chen", handle: "@mayabuilds", face: 44, city: "New York", currency: "USD", category: "Technology", secondary: ["Business", "Education"], languages: ["English", "Mandarin"], bio: "Gadget reviews and startup tools for creators.", mainPlatform: "YouTube", platforms: ["YouTube", "X", "LinkedIn"], followers: 530000, engagement: 4.2, startingPrice: 2400, serviceAreas: ["New York", "Los Angeles", "Remote / Worldwide"], brands: ["Notion", "Anker"] }),
-  globalCreator({ id: "c16", name: "Arjun Nair", handle: "@arjunlifts.sg", face: 15, city: "Singapore", currency: "SGD", category: "Fitness", secondary: ["Lifestyle", "Sports"], languages: ["English", "Malayalam", "Tamil"], bio: "Hybrid training and healthy hawker picks.", mainPlatform: "Instagram", platforms: ["Instagram", "YouTube"], followers: 145000, engagement: 6.8, startingPrice: 900, serviceAreas: ["Singapore", "Kochi", "Remote / Worldwide"], brands: ["Decathlon SG", "Grab"] }),
-  globalCreator({ id: "c17", name: "Sofia Rossi", handle: "@sofiaglow", face: 32, city: "Toronto", currency: "CAD", category: "Beauty", secondary: ["Fashion"], languages: ["English", "Spanish"], bio: "Clean beauty for every skin tone.", mainPlatform: "Instagram", platforms: ["Instagram", "Pinterest"], followers: 198000, engagement: 5.1, startingPrice: 1100, serviceAreas: ["Toronto", "Remote / Worldwide"], brands: ["Sephora Canada", "The Ordinary"] }),
-  globalCreator({ id: "c18", name: "Camille Laurent", handle: "@camille.voyage", face: 26, city: "Paris", currency: "EUR", category: "Travel", secondary: ["Photography", "Lifestyle"], languages: ["French", "English"], bio: "Slow travel across Europe, one train at a time.", mainPlatform: "Instagram", platforms: ["Instagram", "YouTube"], followers: 322000, engagement: 4.6, startingPrice: 1800, serviceAreas: ["Paris", "Europe", "Remote / Worldwide"], brands: ["SNCF Connect", "Airbnb"] }),
+  globalCreator({
+    id: "c13",
+    name: "Layla Haddad",
+    handle: "@layla.wears",
+    face: 47,
+    city: "Dubai",
+    currency: "AED",
+    category: "Fashion",
+    secondary: ["Lifestyle", "Beauty"],
+    languages: ["Arabic", "English"],
+    bio: "Modest fashion and Gulf street style.",
+    mainPlatform: "Instagram",
+    platforms: ["Instagram", "TikTok"],
+    followers: 412000,
+    engagement: 4.8,
+    startingPrice: 3500,
+    serviceAreas: ["Dubai", "Abu Dhabi", "Sharjah", "Remote / Worldwide"],
+    brands: ["Dubai Mall Style Week", "Namshi"],
+  }),
+  globalCreator({
+    id: "c14",
+    name: "Oliver Grant",
+    handle: "@olivereatslondon",
+    face: 59,
+    city: "London",
+    currency: "GBP",
+    category: "Food",
+    secondary: ["Lifestyle"],
+    languages: ["English"],
+    bio: "Hidden London food spots in 60 seconds.",
+    mainPlatform: "TikTok",
+    platforms: ["TikTok", "Instagram", "YouTube"],
+    followers: 268000,
+    engagement: 5.9,
+    startingPrice: 650,
+    serviceAreas: ["London", "Manchester", "Remote / Worldwide"],
+    brands: ["Borough Bites", "Deliveroo"],
+  }),
+  globalCreator({
+    id: "c15",
+    name: "Maya Chen",
+    handle: "@mayabuilds",
+    face: 44,
+    city: "New York",
+    currency: "USD",
+    category: "Technology",
+    secondary: ["Business", "Education"],
+    languages: ["English", "Mandarin"],
+    bio: "Gadget reviews and startup tools for creators.",
+    mainPlatform: "YouTube",
+    platforms: ["YouTube", "X", "LinkedIn"],
+    followers: 530000,
+    engagement: 4.2,
+    startingPrice: 2400,
+    serviceAreas: ["New York", "Los Angeles", "Remote / Worldwide"],
+    brands: ["Notion", "Anker"],
+  }),
+  globalCreator({
+    id: "c16",
+    name: "Arjun Nair",
+    handle: "@arjunlifts.sg",
+    face: 15,
+    city: "Singapore",
+    currency: "SGD",
+    category: "Fitness",
+    secondary: ["Lifestyle", "Sports"],
+    languages: ["English", "Malayalam", "Tamil"],
+    bio: "Hybrid training and healthy hawker picks.",
+    mainPlatform: "Instagram",
+    platforms: ["Instagram", "YouTube"],
+    followers: 145000,
+    engagement: 6.8,
+    startingPrice: 900,
+    serviceAreas: ["Singapore", "Kochi", "Remote / Worldwide"],
+    brands: ["Decathlon SG", "Grab"],
+  }),
+  globalCreator({
+    id: "c17",
+    name: "Sofia Rossi",
+    handle: "@sofiaglow",
+    face: 32,
+    city: "Toronto",
+    currency: "CAD",
+    category: "Beauty",
+    secondary: ["Fashion"],
+    languages: ["English", "Spanish"],
+    bio: "Clean beauty for every skin tone.",
+    mainPlatform: "Instagram",
+    platforms: ["Instagram", "Pinterest"],
+    followers: 198000,
+    engagement: 5.1,
+    startingPrice: 1100,
+    serviceAreas: ["Toronto", "Remote / Worldwide"],
+    brands: ["Sephora Canada", "The Ordinary"],
+  }),
+  globalCreator({
+    id: "c18",
+    name: "Camille Laurent",
+    handle: "@camille.voyage",
+    face: 26,
+    city: "Paris",
+    currency: "EUR",
+    category: "Travel",
+    secondary: ["Photography", "Lifestyle"],
+    languages: ["French", "English"],
+    bio: "Slow travel across Europe, one train at a time.",
+    mainPlatform: "Instagram",
+    platforms: ["Instagram", "YouTube"],
+    followers: 322000,
+    engagement: 4.6,
+    startingPrice: 1800,
+    serviceAreas: ["Paris", "Europe", "Remote / Worldwide"],
+    brands: ["SNCF Connect", "Airbnb"],
+  }),
 ];
 
 export const creators: Creator[] = [
@@ -851,7 +999,6 @@ export const creators: Creator[] = [
   }),
   ...demoGlobalCreators,
 ];
-
 
 export const creatorById = (id: string) => creators.find((c) => c.id === id);
 
@@ -983,7 +1130,12 @@ export const shortlists: Shortlist[] = [
     campaign: "Kadal Merch Drop",
     updated: "3 days ago",
     entries: [
-      { creatorId: "c3", note: "Festive styling angle.", tags: ["Premium"], contactStatus: "Contacted" },
+      {
+        creatorId: "c3",
+        note: "Festive styling angle.",
+        tags: ["Premium"],
+        contactStatus: "Contacted",
+      },
       { creatorId: "c5", note: "Beauty crossover.", tags: [], contactStatus: "Not contacted" },
     ],
   },
@@ -1003,7 +1155,12 @@ export const shortlists: Shortlist[] = [
     description: "Retainer candidates for 2026.",
     updated: "Last week",
     entries: [
-      { creatorId: "c9", note: "Monthly product photography.", tags: ["Retainer"], contactStatus: "Contacted" },
+      {
+        creatorId: "c9",
+        note: "Monthly product photography.",
+        tags: ["Retainer"],
+        contactStatus: "Contacted",
+      },
       { creatorId: "c11", note: "B2B franchise story.", tags: [], contactStatus: "Not contacted" },
     ],
   },
@@ -1474,11 +1631,36 @@ export const conversations: Conversation[] = [
     unread: 2,
     lastTime: "09:42",
     messages: [
-      { id: "m1", from: "business", text: "Hi Anjali, the monsoon menu shoot is confirmed for Friday 1pm.", time: "Mon 10:12" },
-      { id: "m2", from: "creator", text: "Perfect. Can I bring my camera assistant?", time: "Mon 10:30" },
-      { id: "m3", from: "business", text: "Of course. We'll reserve the corner table by the window.", time: "Mon 10:34" },
-      { id: "m4", from: "creator", text: "Uploaded the first reel draft to the campaign for review 🙌", time: "09:40" },
-      { id: "m5", from: "creator", text: "Let me know about the caption — happy to adjust the hashtags.", time: "09:42" },
+      {
+        id: "m1",
+        from: "business",
+        text: "Hi Anjali, the monsoon menu shoot is confirmed for Friday 1pm.",
+        time: "Mon 10:12",
+      },
+      {
+        id: "m2",
+        from: "creator",
+        text: "Perfect. Can I bring my camera assistant?",
+        time: "Mon 10:30",
+      },
+      {
+        id: "m3",
+        from: "business",
+        text: "Of course. We'll reserve the corner table by the window.",
+        time: "Mon 10:34",
+      },
+      {
+        id: "m4",
+        from: "creator",
+        text: "Uploaded the first reel draft to the campaign for review 🙌",
+        time: "09:40",
+      },
+      {
+        id: "m5",
+        from: "creator",
+        text: "Let me know about the caption — happy to adjust the hashtags.",
+        time: "09:42",
+      },
     ],
   },
   {
@@ -1488,8 +1670,18 @@ export const conversations: Conversation[] = [
     unread: 1,
     lastTime: "Yesterday",
     messages: [
-      { id: "m6", from: "business", text: "Hi Fathima, we'd love you for our merch launch in November.", time: "Yesterday 16:02" },
-      { id: "m7", from: "creator", text: "Sounds interesting! Could you share the deliverables and budget?", time: "Yesterday 18:20" },
+      {
+        id: "m6",
+        from: "business",
+        text: "Hi Fathima, we'd love you for our merch launch in November.",
+        time: "Yesterday 16:02",
+      },
+      {
+        id: "m7",
+        from: "creator",
+        text: "Sounds interesting! Could you share the deliverables and budget?",
+        time: "Yesterday 18:20",
+      },
     ],
   },
   {
@@ -1499,8 +1691,18 @@ export const conversations: Conversation[] = [
     unread: 0,
     lastTime: "Tue",
     messages: [
-      { id: "m8", from: "business", text: "Irfan, could you re-cut the intro to include the outlet name?", time: "Tue 11:00" },
-      { id: "m9", from: "creator", text: "Sure, sending a revised version by Thursday.", time: "Tue 11:26" },
+      {
+        id: "m8",
+        from: "business",
+        text: "Irfan, could you re-cut the intro to include the outlet name?",
+        time: "Tue 11:00",
+      },
+      {
+        id: "m9",
+        from: "creator",
+        text: "Sure, sending a revised version by Thursday.",
+        time: "Tue 11:26",
+      },
     ],
   },
   {
@@ -1510,8 +1712,18 @@ export const conversations: Conversation[] = [
     unread: 0,
     lastTime: "Sep 3",
     messages: [
-      { id: "m10", from: "business", text: "Numbers looked fantastic. Thank you Nikhil!", time: "Sep 3 09:00" },
-      { id: "m11", from: "creator", text: "Anytime. Let's do the Christmas edition 🎄", time: "Sep 3 09:15" },
+      {
+        id: "m10",
+        from: "business",
+        text: "Numbers looked fantastic. Thank you Nikhil!",
+        time: "Sep 3 09:00",
+      },
+      {
+        id: "m11",
+        from: "creator",
+        text: "Anytime. Let's do the Christmas edition 🎄",
+        time: "Sep 3 09:15",
+      },
     ],
   },
   {
@@ -1520,7 +1732,12 @@ export const conversations: Conversation[] = [
     unread: 0,
     lastTime: "Aug 28",
     messages: [
-      { id: "m12", from: "business", text: "Are you open to a monthly product photography retainer?", time: "Aug 28 14:10" },
+      {
+        id: "m12",
+        from: "business",
+        text: "Are you open to a monthly product photography retainer?",
+        time: "Aug 28 14:10",
+      },
     ],
   },
 ];
@@ -1747,4 +1964,3 @@ export const plans = [
 
 export const formatFollowers = (n: number) =>
   n >= 1000000 ? `${(n / 1000000).toFixed(1)}M` : n >= 1000 ? `${Math.round(n / 1000)}K` : `${n}`;
-

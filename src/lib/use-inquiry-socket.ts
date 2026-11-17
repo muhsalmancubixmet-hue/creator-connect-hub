@@ -116,7 +116,7 @@ export function useInquirySocket({
           action: "send_message",
           body,
           attachment_url: attachmentUrl,
-        })
+        }),
       );
       return true;
     }
@@ -129,7 +129,7 @@ export function useInquirySocket({
         JSON.stringify({
           action: "typing",
           is_typing: isTyping,
-        })
+        }),
       );
     }
   }, []);
@@ -139,7 +139,7 @@ export function useInquirySocket({
       socketRef.current.send(
         JSON.stringify({
           action: "mark_read",
-        })
+        }),
       );
     }
   }, []);
@@ -151,4 +151,3 @@ export function useInquirySocket({
     markRead,
   };
 }
-

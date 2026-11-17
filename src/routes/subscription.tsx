@@ -52,11 +52,17 @@ function Subscription() {
           setBackendPlans(plansRes.value);
         }
 
-        if (subRes.status === "fulfilled" && subRes.value?.status === "ACTIVE" && subRes.value.plan?.name) {
+        if (
+          subRes.status === "fulfilled" &&
+          subRes.value?.status === "ACTIVE" &&
+          subRes.value.plan?.name
+        ) {
           setActivePlan(subRes.value.plan.name);
           if (subRes.value.current_period_end) {
             const d = new Date(subRes.value.current_period_end);
-            setRenewDate(`renews ${d.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`);
+            setRenewDate(
+              `renews ${d.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`,
+            );
           }
         }
       } catch (err) {
@@ -77,9 +83,7 @@ function Subscription() {
       return;
     }
 
-    const matched = backendPlans.find(
-      (bp) => bp.name.toLowerCase() === p.name.toLowerCase()
-    );
+    const matched = backendPlans.find((bp) => bp.name.toLowerCase() === p.name.toLowerCase());
 
     if (!matched) {
       toast.error("Selected plan is currently unavailable on server.");
@@ -116,15 +120,14 @@ function Subscription() {
             if (verifyRes.current_period_end) {
               const d = new Date(verifyRes.current_period_end);
               setRenewDate(
-                `renews ${d.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`
+                `renews ${d.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`,
               );
             }
             toast.success("Payment Successful!", {
               description: `You are now subscribed to ${matched.name}.`,
             });
           } catch (err: any) {
-            const msg =
-              err?.response?.data?.detail || "Payment verification failed on server.";
+            const msg = err?.response?.data?.detail || "Payment verification failed on server.";
             toast.error("Verification Error", { description: msg });
           }
         },
@@ -170,10 +173,7 @@ function Subscription() {
 
   return (
     <AppShell>
-      <PageHeader
-        title="Subscription"
-        subtitle={`You're on ${activePlan}. Upgrade any time.`}
-      />
+      <PageHeader title="Subscription" subtitle={`You're on ${activePlan}. Upgrade any time.`} />
 
       <div className="card-elevated mb-8 flex flex-col gap-4 p-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex-1">
@@ -204,7 +204,7 @@ function Subscription() {
           const isCurrent = p.name === activePlan;
           const isLoading = loadingPlan === p.name;
           const matchedBackend = backendPlans.find(
-            (bp) => bp.name.toLowerCase() === p.name.toLowerCase()
+            (bp) => bp.name.toLowerCase() === p.name.toLowerCase(),
           );
           const displayPrice = matchedBackend ? matchedBackend.price_cents / 100 : p.price;
           const displayCurrency = (matchedBackend?.currency as any) || p.currency || "INR";

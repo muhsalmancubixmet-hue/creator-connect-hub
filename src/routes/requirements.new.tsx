@@ -75,13 +75,15 @@ function NewRequirement() {
     queryFn: () => getTaxonomyLocations(),
   });
 
-  const availableCategories = backendCategories.length > 0
-    ? Array.from(new Set(backendCategories.map((c) => c.name)))
-    : CATEGORIES;
+  const availableCategories =
+    backendCategories.length > 0
+      ? Array.from(new Set(backendCategories.map((c) => c.name)))
+      : CATEGORIES;
 
-  const availableLocations = backendLocations.length > 0
-    ? backendLocations.map((l) => ({ name: l.name, fullPath: l.full_path }))
-    : LOCATIONS.map((l) => ({ name: l, fullPath: l }));
+  const availableLocations =
+    backendLocations.length > 0
+      ? backendLocations.map((l) => ({ name: l.name, fullPath: l.full_path }))
+      : LOCATIONS.map((l) => ({ name: l, fullPath: l }));
 
   const [form, setForm] = useState({
     title: "Weekend brunch launch — Kochi food creators",
@@ -383,7 +385,9 @@ function NewRequirement() {
 
               <div className="mt-4 rounded-2xl bg-secondary/60 p-4">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">Budget</p>
-                <p className="font-display text-xl font-semibold">{formatMoney(form.budget, getDisplayCurrency())}</p>
+                <p className="font-display text-xl font-semibold">
+                  {formatMoney(form.budget, getDisplayCurrency())}
+                </p>
                 <p className="mt-2 text-xs text-muted-foreground">
                   Deliverables: {form.deliverables.join(", ") || "—"}
                 </p>

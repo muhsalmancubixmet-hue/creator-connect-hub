@@ -43,7 +43,8 @@ export function CollaborationDialog({
 
   useEffect(() => {
     if (open) {
-      const storedEmail = typeof window !== "undefined" ? localStorage.getItem("business_email") || "" : "";
+      const storedEmail =
+        typeof window !== "undefined" ? localStorage.getItem("business_email") || "" : "";
       const defaultCompany = business?.company_name || "Nila Foods";
       const defaultContact = business?.contact_name || "Brand Manager";
       const defaultEmail = business?.contact_email || storedEmail || "contact@nilafoods.com";
@@ -55,7 +56,7 @@ export function CollaborationDialog({
       if (service) {
         setSubject(`Service Booking: ${service.name}`);
         setMessage(
-          `Hi ${creator.name},\n\nWe would like to book your "${service.name}" package for our upcoming brand initiative. Please review and confirm your availability.\n\nBest regards,\n${defaultCompany}`
+          `Hi ${creator.name},\n\nWe would like to book your "${service.name}" package for our upcoming brand initiative. Please review and confirm your availability.\n\nBest regards,\n${defaultCompany}`,
         );
         if (service.price && service.price > 0) {
           setBudget(service.price);
@@ -63,7 +64,7 @@ export function CollaborationDialog({
       } else {
         setSubject(`Brand Collaboration Proposal - ${defaultCompany}`);
         setMessage(
-          `Hi ${creator.name},\n\nWe love your content and believe your audience aligns perfectly with our brand. We would like to discuss a sponsored collaboration featuring our products.\n\nKey Deliverables:\n• 1 Instagram Reel\n• 2 Stories with link stickers\n\nLooking forward to working together!\n\nBest regards,\n${defaultCompany}`
+          `Hi ${creator.name},\n\nWe love your content and believe your audience aligns perfectly with our brand. We would like to discuss a sponsored collaboration featuring our products.\n\nKey Deliverables:\n• 1 Instagram Reel\n• 2 Stories with link stickers\n\nLooking forward to working together!\n\nBest regards,\n${defaultCompany}`,
         );
       }
     }
@@ -91,12 +92,14 @@ export function CollaborationDialog({
       });
 
       toast.success(
-        res?.detail || `Collaboration proposal sent to ${creator.name}! They can review it immediately in Creator Hub.`
+        res?.detail ||
+          `Collaboration proposal sent to ${creator.name}! They can review it immediately in Creator Hub.`,
       );
       onOpenChange(false);
     } catch (err: any) {
       console.error("Failed to dispatch collaboration inquiry:", err);
-      const detail = err?.response?.data?.detail || "Failed to submit collaboration request. Please try again.";
+      const detail =
+        err?.response?.data?.detail || "Failed to submit collaboration request. Please try again.";
       toast.error(detail);
     } finally {
       setSubmitting(false);
@@ -169,7 +172,8 @@ export function CollaborationDialog({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <Label className="text-xs font-semibold text-muted-foreground">
-                <DollarSign className="mr-1 inline size-3.5" /> Proposed Budget ({creator.currency || "INR"})
+                <DollarSign className="mr-1 inline size-3.5" /> Proposed Budget (
+                {creator.currency || "INR"})
               </Label>
               <Input
                 type="number"
@@ -218,11 +222,7 @@ export function CollaborationDialog({
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="rounded-xl text-xs font-medium"
-              disabled={submitting}
-            >
+            <Button type="submit" className="rounded-xl text-xs font-medium" disabled={submitting}>
               <Send className="mr-1.5 size-3.5" />
               {submitting ? "Dispatching..." : "Send Proposal"}
             </Button>
@@ -232,4 +232,3 @@ export function CollaborationDialog({
     </Dialog>
   );
 }
-

@@ -14,27 +14,23 @@ export const Route = createFileRoute("/requirements/")({
       { title: "Requirements — Influencers.com Business" },
       {
         name: "description",
-        content:
-          "Post what your business needs and let matching creators apply to your brief.",
+        content: "Post what your business needs and let matching creators apply to your brief.",
       },
       { property: "og:title", content: "Requirements — Influencers.com Business" },
-      { property: "og:description", content: "Post influencer requirements and review applicants." },
+      {
+        property: "og:description",
+        content: "Post influencer requirements and review applicants.",
+      },
     ],
   }),
   component: Requirements,
 });
 
-export function RequirementCard({
-  id,
-  requirement,
-}: {
-  id?: string;
-  requirement?: any;
-}) {
+export function RequirementCard({ id, requirement }: { id?: string; requirement?: any }) {
   const r = requirement;
   if (!r) return null;
 
-  const budget = r.budget ?? ((r.min_budget_cents || 0) / 100);
+  const budget = r.budget ?? (r.min_budget_cents || 0) / 100;
   const creatorsNeeded = r.creatorsNeeded ?? r.creators_needed ?? 1;
   const applications = r.applications ?? r.applications_count ?? 0;
   const deliverables = r.deliverables || [];
@@ -82,7 +78,9 @@ export function RequirementCard({
         <div className="inline-flex items-center gap-1.5">
           <CalendarDays className="size-3.5" /> Due {deadline}
         </div>
-        <div className="font-display font-semibold text-foreground">{formatMoney(budget, "INR")}</div>
+        <div className="font-display font-semibold text-foreground">
+          {formatMoney(budget, "INR")}
+        </div>
       </dl>
     </Link>
   );
@@ -116,7 +114,8 @@ function Requirements() {
           <div>
             <p className="font-display text-base font-semibold">Creator Collaboration Pipeline</p>
             <p className="text-sm text-muted-foreground">
-              Published requirements get responses from verified creators within 48 hours on average.
+              Published requirements get responses from verified creators within 48 hours on
+              average.
             </p>
           </div>
         </div>
@@ -126,7 +125,9 @@ function Requirements() {
       </div>
 
       {isLoading ? (
-        <div className="py-12 text-center text-sm text-muted-foreground">Loading requirements...</div>
+        <div className="py-12 text-center text-sm text-muted-foreground">
+          Loading requirements...
+        </div>
       ) : apiReqs.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-12 text-center">
           <FileText className="mx-auto size-10 text-muted-foreground/40" />

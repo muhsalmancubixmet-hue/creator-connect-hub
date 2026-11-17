@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, BadgeCheck, MessageSquare, Paperclip, Search, Send, Sparkles } from "lucide-react";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  MessageSquare,
+  Paperclip,
+  Search,
+  Send,
+  Sparkles,
+} from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -29,17 +37,29 @@ export const Route = createFileRoute("/messages")({
         content: "Chat directly with creators with real-time brief context and status tracking.",
       },
       { property: "og:title", content: "Messages — Influencers.com Business" },
-      { property: "og:description", content: "Your live creator conversations and negotiation threads." },
+      {
+        property: "og:description",
+        content: "Your live creator conversations and negotiation threads.",
+      },
     ],
   }),
   component: Messages,
 });
 
 const QUICK_TEMPLATES = [
-  { label: "Brief confirmation", text: "Hi! We wanted to confirm the deliverables and schedule for this campaign." },
-  { label: "Content review", text: "Thank you! Our creative team has reviewed the initial draft and we love the direction." },
+  {
+    label: "Brief confirmation",
+    text: "Hi! We wanted to confirm the deliverables and schedule for this campaign.",
+  },
+  {
+    label: "Content review",
+    text: "Thank you! Our creative team has reviewed the initial draft and we love the direction.",
+  },
   { label: "Timeline check", text: "Could you share an estimated date for the next draft upload?" },
-  { label: "Payment terms", text: "The milestone payment has been scheduled in line with our agreed terms." },
+  {
+    label: "Payment terms",
+    text: "The milestone payment has been scheduled in line with our agreed terms.",
+  },
 ];
 
 function Messages() {
@@ -66,9 +86,14 @@ function Messages() {
 
   const activeInquiry = inquiries.find((i) => i.id === activeId) || inquiries[0] || null;
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("business_access_token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("business_access_token") : null;
 
-  const { isConnected, sendMessage: sendWsMessage, markRead } = useInquirySocket({
+  const {
+    isConnected,
+    sendMessage: sendWsMessage,
+    markRead,
+  } = useInquirySocket({
     inquiryId: activeInquiry ? activeInquiry.id : null,
     token,
     onNewMessage: (newMsg) => {
@@ -84,13 +109,13 @@ function Messages() {
               sender_name: newMsg.sender_name,
               body: newMsg.body,
               created_at: newMsg.created_at,
-              is_from_business: newMsg.sender_role === 'business',
-              is_from_creator: newMsg.sender_role === 'creator',
-              is_me: newMsg.sender_role === 'business',
+              is_from_business: newMsg.sender_role === "business",
+              is_from_creator: newMsg.sender_role === "creator",
+              is_me: newMsg.sender_role === "business",
               is_read: false,
             },
           ];
-        }
+        },
       );
       queryClient.invalidateQueries({ queryKey: ["business-inquiries"] });
       queryClient.invalidateQueries({ queryKey: ["business-unread-count"] });
@@ -188,7 +213,7 @@ function Messages() {
         <div
           className={cn(
             "flex flex-col h-full min-h-0 overflow-hidden border-r border-border bg-card/50",
-            mobileOpen && "hidden lg:flex"
+            mobileOpen && "hidden lg:flex",
           )}
         >
           <div className="border-b border-border p-3 shrink-0">
@@ -212,7 +237,9 @@ function Messages() {
             {!loadingInquiries && filteredInquiries.length === 0 && (
               <div className="p-8 text-center">
                 <MessageSquare className="mx-auto size-8 text-muted-foreground/50" />
-                <p className="mt-2 text-xs font-medium text-muted-foreground">No conversations yet</p>
+                <p className="mt-2 text-xs font-medium text-muted-foreground">
+                  No conversations yet
+                </p>
                 <p className="mt-1 text-[11px] text-muted-foreground/80">
                   Send a collaboration request to a creator to start chatting.
                 </p>
@@ -230,7 +257,8 @@ function Messages() {
                   `https://ui-avatars.com/api/?name=${encodeURIComponent(cv.creator_name)}&background=E0F2FE&color=0369A1&bold=true`;
 
                 const isAccepted = cv.status === "ACCEPTED";
-                const isUnread = cv.is_read === false || (cv.unread_count !== undefined && cv.unread_count > 0);
+                const isUnread =
+                  cv.is_read === false || (cv.unread_count !== undefined && cv.unread_count > 0);
 
                 return (
                   <button
@@ -241,7 +269,7 @@ function Messages() {
                     }}
                     className={cn(
                       "flex w-full gap-3 border-b border-border px-4 py-3.5 text-left transition-colors hover:bg-secondary/60",
-                      isSelected && "bg-primary-soft/50"
+                      isSelected && "bg-primary-soft/50",
                     )}
                   >
                     <div className="relative shrink-0">
@@ -252,10 +280,17 @@ function Messages() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <p className={cn("truncate text-sm", isUnread ? "font-bold text-foreground" : "font-medium")}>
+                        <p
+                          className={cn(
+                            "truncate text-sm",
+                            isUnread ? "font-bold text-foreground" : "font-medium",
+                          )}
+                        >
                           {cv.creator_name}
                         </p>
-                        <span className="shrink-0 text-[10px] text-muted-foreground">{cv.date}</span>
+                        <span className="shrink-0 text-[10px] text-muted-foreground">
+                          {cv.date}
+                        </span>
                       </div>
                       <p className="truncate text-[11px] font-medium text-primary">{cv.campaign}</p>
                       <p className="truncate text-xs text-muted-foreground">{cv.message}</p>
@@ -267,7 +302,7 @@ function Messages() {
                           "text-[10px] uppercase font-semibold",
                           isAccepted
                             ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400",
                         )}
                       >
                         {cv.status}
@@ -280,7 +315,12 @@ function Messages() {
         </div>
 
         {/* Right Pane: Active Thread */}
-        <div className={cn("flex flex-col h-full min-h-0 overflow-hidden bg-background/50", !mobileOpen && "hidden lg:flex")}>
+        <div
+          className={cn(
+            "flex flex-col h-full min-h-0 overflow-hidden bg-background/50",
+            !mobileOpen && "hidden lg:flex",
+          )}
+        >
           {!activeInquiry ? (
             <div className="flex flex-1 items-center justify-center p-8 text-center">
               <div>
@@ -331,13 +371,18 @@ function Messages() {
                       "rounded-full text-xs font-semibold",
                       activeInquiry.status === "ACCEPTED"
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-                        : "border-primary/20 bg-primary/10 text-primary"
+                        : "border-primary/20 bg-primary/10 text-primary",
                     )}
                   >
-                    {activeInquiry.status === "ACCEPTED" ? "✓ Proposal Accepted" : activeInquiry.status}
+                    {activeInquiry.status === "ACCEPTED"
+                      ? "✓ Proposal Accepted"
+                      : activeInquiry.status}
                   </Badge>
                   <Button asChild size="sm" variant="outline" className="rounded-xl text-xs">
-                    <Link to="/creators/$creatorId" params={{ creatorId: activeInquiry.creator_id }}>
+                    <Link
+                      to="/creators/$creatorId"
+                      params={{ creatorId: activeInquiry.creator_id }}
+                    >
                       View Profile
                     </Link>
                   </Button>
@@ -345,19 +390,27 @@ function Messages() {
               </div>
 
               {/* Messages Body */}
-              <div ref={messagesContainerRef} className="flex-1 min-h-0 space-y-4 overflow-y-auto px-4 py-5 bg-background/30">
+              <div
+                ref={messagesContainerRef}
+                className="flex-1 min-h-0 space-y-4 overflow-y-auto px-4 py-5 bg-background/30"
+              >
                 {/* System Initial Card */}
                 <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border bg-card/60 p-4 text-center">
                   <Sparkles className="mx-auto size-5 text-primary" />
-                  <h4 className="mt-1 font-display text-xs font-semibold">{activeInquiry.campaign}</h4>
+                  <h4 className="mt-1 font-display text-xs font-semibold">
+                    {activeInquiry.campaign}
+                  </h4>
                   <p className="mt-1 text-[11px] text-muted-foreground">
-                    Collaboration thread initiated with {activeInquiry.creator_name} on {activeInquiry.date}
+                    Collaboration thread initiated with {activeInquiry.creator_name} on{" "}
+                    {activeInquiry.date}
                   </p>
                   <p className="mt-1 text-xs font-semibold text-primary">{activeInquiry.budget}</p>
                 </div>
 
                 {loadingMessages && (
-                  <div className="py-8 text-center text-xs text-muted-foreground">Loading message history...</div>
+                  <div className="py-8 text-center text-xs text-muted-foreground">
+                    Loading message history...
+                  </div>
                 )}
 
                 {!loadingMessages &&
@@ -370,18 +423,24 @@ function Messages() {
                           "max-w-[78%] rounded-2xl px-4 py-2.5 text-sm shadow-xs",
                           isMe
                             ? "ml-auto rounded-br-xs bg-primary text-primary-foreground"
-                            : "mr-auto rounded-bl-xs border border-border bg-card text-foreground"
+                            : "mr-auto rounded-bl-xs border border-border bg-card text-foreground",
                         )}
                       >
                         <div className="mb-1 flex items-center justify-between gap-3 text-[10px] opacity-75">
-                          <span className="font-semibold">{isMe ? business?.company_name || "You" : m.sender_name}</span>
-                          <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                          <span className="font-semibold">
+                            {isMe ? business?.company_name || "You" : m.sender_name}
+                          </span>
+                          <span>
+                            {new Date(m.created_at).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
                         </div>
                         <p className="text-xs leading-relaxed whitespace-pre-wrap">{m.body}</p>
                       </div>
                     );
                   })}
-
               </div>
 
               {/* Input Area */}
@@ -417,7 +476,9 @@ function Messages() {
                     disabled={!draft.trim() || sendMutation.isPending}
                   >
                     <Send className="size-4" />
-                    <span className="hidden sm:inline">{sendMutation.isPending ? "Sending..." : "Send"}</span>
+                    <span className="hidden sm:inline">
+                      {sendMutation.isPending ? "Sending..." : "Send"}
+                    </span>
                   </Button>
                 </div>
               </div>

@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Globe2, GitCompareArrows, LayoutGrid, Map as MapIcon, Search, SearchX, SplitSquareHorizontal } from "lucide-react";
+import {
+  Globe2,
+  GitCompareArrows,
+  LayoutGrid,
+  Map as MapIcon,
+  Search,
+  SearchX,
+  SplitSquareHorizontal,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getDiscoverCreators, mapBackendCreatorToCreator } from "@/lib/business-api";
@@ -69,7 +77,9 @@ function Discover() {
       const payload: Parameters<typeof getDiscoverCreators>[0] = {
         ...(filters.query ? { search: filters.query } : {}),
         ...(filters.categories[0] ? { category: filters.categories[0] } : {}),
-        ...(filters.near?.label || filters.cities[0] ? { location: filters.near?.label || filters.cities[0] } : {}),
+        ...(filters.near?.label || filters.cities[0]
+          ? { location: filters.near?.label || filters.cities[0] }
+          : {}),
         min_followers: filters.followers[0],
         ...(filters.followers[1] < 1000000 ? { max_followers: filters.followers[1] } : {}),
         ...(filters.platforms[0] ? { platform: filters.platforms[0] } : {}),
@@ -80,7 +90,10 @@ function Discover() {
   });
 
   const apiCreators = creatorData || [];
-  const results = useMemo(() => applyFilters(apiCreators, filters, sort), [apiCreators, filters, sort]);
+  const results = useMemo(
+    () => applyFilters(apiCreators, filters, sort),
+    [apiCreators, filters, sort],
+  );
 
   const toggleSelect = (id: string) =>
     setSelected((prev) =>
@@ -130,7 +143,11 @@ function Discover() {
               <ToggleGroupItem value="list" aria-label="List view" className="rounded-lg">
                 <LayoutGrid className="size-4" />
               </ToggleGroupItem>
-              <ToggleGroupItem value="split" aria-label="Split view" className="hidden rounded-lg md:inline-flex">
+              <ToggleGroupItem
+                value="split"
+                aria-label="Split view"
+                className="hidden rounded-lg md:inline-flex"
+              >
                 <SplitSquareHorizontal className="size-4" />
               </ToggleGroupItem>
               <ToggleGroupItem value="map" aria-label="Map view" className="rounded-lg">
@@ -179,7 +196,8 @@ function Discover() {
                 }
               />
               <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Globe2 className="size-3.5" /> Zoom, pan and tap a creator. Nearby creators cluster automatically.
+                <Globe2 className="size-3.5" /> Zoom, pan and tap a creator. Nearby creators cluster
+                automatically.
               </p>
               {focusId && results.find((c) => c.id === focusId) && (
                 <div className="mt-3 max-w-sm">

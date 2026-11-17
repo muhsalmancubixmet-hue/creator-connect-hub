@@ -40,7 +40,12 @@ export function CreatorCard({
     setSaving(true);
     try {
       const res = await toggleCreatorShortlist(creator.id);
-      toast.success(res.detail || (res.is_saved ? `${creator.name} saved to shortlist` : `${creator.name} removed from shortlist`));
+      toast.success(
+        res.detail ||
+          (res.is_saved
+            ? `${creator.name} saved to shortlist`
+            : `${creator.name} removed from shortlist`),
+      );
     } catch (err: any) {
       toast.error(err.response?.data?.detail || "Failed to update shortlist.");
     } finally {
@@ -125,7 +130,6 @@ export function CreatorCard({
           </div>
         </div>
 
-
         <div className="mt-3 flex flex-wrap gap-1.5">
           {creator.services.slice(0, 3).map((s) => (
             <Badge key={s.name} variant="secondary" className="rounded-full font-normal">
@@ -158,12 +162,7 @@ export function CreatorCard({
             <Bookmark className="size-4" />
             <span className="sr-only sm:not-sr-only">{saving ? "..." : "Save"}</span>
           </Button>
-          <Button
-            asChild
-            size="sm"
-            variant="outline"
-            className="rounded-xl"
-          >
+          <Button asChild size="sm" variant="outline" className="rounded-xl">
             <Link to="/messages">
               <MessageSquare className="size-4" />
               <span className="sr-only sm:not-sr-only">Contact</span>

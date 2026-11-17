@@ -49,18 +49,15 @@ function LoginPage() {
       const destination = search?.redirect || "/";
       navigate({ to: destination as any });
     } catch (err: any) {
-      let errorMsg =
-        err.response?.data?.detail ||
-        err.response?.data?.message;
+      let errorMsg = err.response?.data?.detail || err.response?.data?.message;
 
       // Extract granular field-level validation errors from Django REST framework
       if (!errorMsg && err.response?.data && typeof err.response.data === "object") {
-        const fieldErrors = Object.entries(err.response.data)
-          .map(([field, msgs]) => {
-            const fieldName = field.charAt(0).toUpperCase() + field.slice(1).replace(/_/g, " ");
-            const msgText = Array.isArray(msgs) ? msgs.join(" ") : String(msgs);
-            return `${fieldName}: ${msgText}`;
-          });
+        const fieldErrors = Object.entries(err.response.data).map(([field, msgs]) => {
+          const fieldName = field.charAt(0).toUpperCase() + field.slice(1).replace(/_/g, " ");
+          const msgText = Array.isArray(msgs) ? msgs.join(" ") : String(msgs);
+          return `${fieldName}: ${msgText}`;
+        });
         if (fieldErrors.length > 0) {
           errorMsg = fieldErrors.join(" | ");
         }
@@ -214,12 +211,7 @@ function LoginPage() {
               )}
             </div>
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="mt-2 w-full rounded-xl"
-              size="lg"
-            >
+            <Button type="submit" disabled={loading} className="mt-2 w-full rounded-xl" size="lg">
               {loading ? (
                 "Processing..."
               ) : mode === "login" ? (
@@ -246,4 +238,3 @@ function LoginPage() {
     </div>
   );
 }
-

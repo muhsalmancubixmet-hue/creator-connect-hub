@@ -29,7 +29,7 @@ import {
   removeCreatorFromShortlist,
   addCreatorToShortlist,
   type BusinessShortlist,
-  type ShortlistCreatorEntry
+  type ShortlistCreatorEntry,
 } from "@/lib/business-api";
 
 export const Route = createFileRoute("/shortlists/$shortlistId")({
@@ -46,7 +46,11 @@ function ShortlistDetail() {
   const { shortlistId } = useParams({ from: "/shortlists/$shortlistId" });
   const queryClient = useQueryClient();
 
-  const { data: shortlist, isLoading, error } = useQuery<BusinessShortlist>({
+  const {
+    data: shortlist,
+    isLoading,
+    error,
+  } = useQuery<BusinessShortlist>({
     queryKey: ["business-shortlist", shortlistId],
     queryFn: () => getBusinessShortlistDetail(shortlistId),
   });
@@ -67,7 +71,13 @@ function ShortlistDetail() {
   });
 
   const moveMutation = useMutation({
-    mutationFn: async ({ targetShortlistId, creatorId }: { targetShortlistId: string; creatorId: string }) => {
+    mutationFn: async ({
+      targetShortlistId,
+      creatorId,
+    }: {
+      targetShortlistId: string;
+      creatorId: string;
+    }) => {
       await addCreatorToShortlist(targetShortlistId, creatorId);
       await removeCreatorFromShortlist(shortlistId, creatorId);
     },
@@ -94,7 +104,9 @@ function ShortlistDetail() {
       <AppShell>
         <div className="p-12 text-center">
           <h2 className="font-display text-xl font-bold">Shortlist Not Found</h2>
-          <p className="mt-2 text-sm text-muted-foreground">This collection might have been deleted or archived.</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            This collection might have been deleted or archived.
+          </p>
           <Button asChild className="mt-4 rounded-xl">
             <Link to="/shortlists">Back to Shortlists</Link>
           </Button>
@@ -129,7 +141,9 @@ function ShortlistDetail() {
       {entries.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-12 text-center bg-card/40">
           <Sparkles className="mx-auto size-10 text-primary/60" />
-          <h3 className="mt-4 font-display text-base font-semibold">No creators in this shortlist yet</h3>
+          <h3 className="mt-4 font-display text-base font-semibold">
+            No creators in this shortlist yet
+          </h3>
           <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
             Browse creators across Kerala and click "Add to Shortlist" to organize them here.
           </p>
@@ -162,7 +176,9 @@ function ShortlistDetail() {
                         {entry.creator_name}
                         {entry.creator_verified && <BadgeCheck className="size-4 text-primary" />}
                       </Link>
-                      <span className="text-xs text-muted-foreground font-mono">@{entry.creator_handle}</span>
+                      <span className="text-xs text-muted-foreground font-mono">
+                        @{entry.creator_handle}
+                      </span>
                       {entry.creator_category && (
                         <Badge variant="secondary" className="rounded-full text-xs">
                           {entry.creator_category}
@@ -179,7 +195,13 @@ function ShortlistDetail() {
                       <MapPin className="size-3" />
                       <span>{entry.creator_location || "Kerala, India"}</span>
                       <span>·</span>
-                      <span>Added {new Date(entry.created_at).toLocaleDateString([], { month: "short", day: "numeric" })}</span>
+                      <span>
+                        Added{" "}
+                        {new Date(entry.created_at).toLocaleDateString([], {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
                     </div>
 
                     {entry.creator_bio && (
@@ -219,13 +241,20 @@ function ShortlistDetail() {
                           .map((s) => (
                             <DropdownMenuItem
                               key={s.id}
-                              onClick={() => moveMutation.mutate({ targetShortlistId: s.id, creatorId: entry.creator_id })}
+                              onClick={() =>
+                                moveMutation.mutate({
+                                  targetShortlistId: s.id,
+                                  creatorId: entry.creator_id,
+                                })
+                              }
                             >
                               {s.name}
                             </DropdownMenuItem>
                           ))}
                         {allShortlists.filter((s) => s.id !== shortlist.id).length === 0 && (
-                          <div className="px-3 py-2 text-xs text-muted-foreground">No other shortlists</div>
+                          <div className="px-3 py-2 text-xs text-muted-foreground">
+                            No other shortlists
+                          </div>
                         )}
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -250,4 +279,3 @@ function ShortlistDetail() {
     </AppShell>
   );
 }
-

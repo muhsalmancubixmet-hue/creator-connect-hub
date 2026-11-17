@@ -125,7 +125,8 @@ function Dashboard() {
       id: inq.id,
       name: inq.campaign || inq.subject,
       category: `Direct Partner · @${inq.creator_handle}`,
-      status: inq.status === "ACCEPTED" ? "Accepted" : inq.status === "NEW" ? "Invited" : "In Progress",
+      status:
+        inq.status === "ACCEPTED" ? "Accepted" : inq.status === "NEW" ? "Invited" : "In Progress",
       budget: inq.budget_cents ? inq.budget_cents / 100 : 0,
       creatorsCount: 1,
       progress: inq.status === "ACCEPTED" ? 50 : 20,
@@ -165,7 +166,9 @@ function Dashboard() {
     },
     {
       label: "Accepted Collabs",
-      value: String(stats?.accepted_collaborations ?? inquiries.filter((i) => i.status === "ACCEPTED").length),
+      value: String(
+        stats?.accepted_collaborations ?? inquiries.filter((i) => i.status === "ACCEPTED").length,
+      ),
       change: "Ready for production",
       tone: "accent" as const,
       icon: CheckCircle2,
@@ -294,7 +297,8 @@ function Dashboard() {
                     <CampaignStatusBadge status={c.status as any} />
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {c.category} · {formatMoney(c.budget, "INR")} · {c.creatorsCount} {c.creatorsCount === 1 ? "creator" : "creators"}
+                    {c.category} · {formatMoney(c.budget, "INR")} · {c.creatorsCount}{" "}
+                    {c.creatorsCount === 1 ? "creator" : "creators"}
                   </p>
                   <Progress value={c.progress} className="mt-3 h-1.5" />
                 </Link>
@@ -312,7 +316,9 @@ function Dashboard() {
           </div>
           <ul className="mt-4 space-y-4">
             {realActivities.length === 0 ? (
-              <li className="py-8 text-center text-xs text-muted-foreground">No recent brand activity.</li>
+              <li className="py-8 text-center text-xs text-muted-foreground">
+                No recent brand activity.
+              </li>
             ) : (
               realActivities.slice(0, 5).map((n) => (
                 <li key={n.id} className="flex gap-3">
@@ -323,7 +329,11 @@ function Dashboard() {
                         : "mt-1 grid size-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary"
                     }
                   >
-                    {n.isAccepted ? <CheckCircle2 className="size-4" /> : <MessageSquare className="size-4" />}
+                    {n.isAccepted ? (
+                      <CheckCircle2 className="size-4" />
+                    ) : (
+                      <MessageSquare className="size-4" />
+                    )}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-medium">{n.title}</p>

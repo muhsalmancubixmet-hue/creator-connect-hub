@@ -23,7 +23,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { creatorById, formatFollowers, formatMoney } from "@/data/mock";
-import { getCreatorDetail, getDiscoverCreators, mapBackendCreatorToCreator, toggleCreatorShortlist } from "@/lib/business-api";
+import {
+  getCreatorDetail,
+  getDiscoverCreators,
+  mapBackendCreatorToCreator,
+  toggleCreatorShortlist,
+} from "@/lib/business-api";
 
 export const Route = createFileRoute("/creators/$creatorId")({
   loader: async ({ params }) => {
@@ -61,7 +66,12 @@ export const Route = createFileRoute("/creators/$creatorId")({
 function CreatorProfile() {
   const { creator } = Route.useLoaderData();
   const [collabOpen, setCollabOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<{ id?: string; name: string; price?: number; turnaround?: string } | null>(null);
+  const [selectedService, setSelectedService] = useState<{
+    id?: string;
+    name: string;
+    price?: number;
+    turnaround?: string;
+  } | null>(null);
   const [savingShortlist, setSavingShortlist] = useState(false);
 
   const handleOpenCollab = (service?: any) => {
@@ -73,7 +83,12 @@ function CreatorProfile() {
     setSavingShortlist(true);
     try {
       const res = await toggleCreatorShortlist(creator.id);
-      toast.success(res.detail || (res.is_saved ? `${creator.name} added to shortlist` : `${creator.name} removed from shortlist`));
+      toast.success(
+        res.detail ||
+          (res.is_saved
+            ? `${creator.name} added to shortlist`
+            : `${creator.name} removed from shortlist`),
+      );
     } catch (err: any) {
       toast.error(err.response?.data?.detail || "Failed to update shortlist.");
     } finally {
@@ -83,7 +98,12 @@ function CreatorProfile() {
 
   const { data: discoverData } = useQuery({
     queryKey: ["similar-creators", creator.category],
-    queryFn: () => getDiscoverCreators(creator.category && (creator.category as string) !== "General" ? { category: creator.category } : {}),
+    queryFn: () =>
+      getDiscoverCreators(
+        creator.category && (creator.category as string) !== "General"
+          ? { category: creator.category }
+          : {},
+      ),
   });
 
   const similar = (discoverData?.results || [])
@@ -112,7 +132,9 @@ function CreatorProfile() {
               </h1>
               <p className="text-sm text-muted-foreground">{creator.handle}</p>
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-                <Badge className="rounded-full bg-primary/10 text-primary">{creator.category}</Badge>
+                <Badge className="rounded-full bg-primary/10 text-primary">
+                  {creator.category}
+                </Badge>
                 <span className="inline-flex items-center gap-1 text-muted-foreground">
                   <MapPin className="size-4" /> {creator.location}
                 </span>
@@ -128,7 +150,9 @@ function CreatorProfile() {
               <p className="mt-4 max-w-2xl text-sm text-muted-foreground">{creator.about}</p>
               <p className="mt-3 text-sm">
                 <span className="text-muted-foreground">Based in </span>
-                <span className="font-medium">{creator.geo.city}, {creator.geo.country}</span>
+                <span className="font-medium">
+                  {creator.geo.city}, {creator.geo.country}
+                </span>
                 <span className="text-muted-foreground"> · Available for </span>
                 <span className="font-medium">{creator.serviceAreas.join(", ")}</span>
                 {creator.travel && <span className="text-muted-foreground"> · Open to travel</span>}
@@ -136,11 +160,7 @@ function CreatorProfile() {
             </div>
 
             <div className="flex shrink-0 flex-wrap gap-2">
-              <Button
-                size="lg"
-                className="rounded-xl"
-                onClick={() => handleOpenCollab()}
-              >
+              <Button size="lg" className="rounded-xl" onClick={() => handleOpenCollab()}>
                 <MessageSquare className="size-4" /> Send Collaboration Request
               </Button>
               <Button
@@ -150,7 +170,8 @@ function CreatorProfile() {
                 disabled={savingShortlist}
                 onClick={handleToggleShortlist}
               >
-                <Bookmark className="size-4" /> {savingShortlist ? "Saving..." : "Save to Shortlist"}
+                <Bookmark className="size-4" />{" "}
+                {savingShortlist ? "Saving..." : "Save to Shortlist"}
               </Button>
             </div>
           </div>
@@ -163,9 +184,7 @@ function CreatorProfile() {
                 </p>
                 <p className="mt-1 truncate text-sm">{s.handle}</p>
                 <div className="mt-2 flex items-center justify-between text-sm">
-                  <span className="font-display font-semibold">
-                    {formatFollowers(s.followers)}
-                  </span>
+                  <span className="font-display font-semibold">{formatFollowers(s.followers)}</span>
                   <span className="inline-flex items-center gap-1 text-success">
                     <TrendingUp className="size-3.5" /> {s.engagement}%
                   </span>
@@ -195,8 +214,12 @@ function CreatorProfile() {
         <TabsContent value="portfolio" className="mt-5">
           {creator.portfolio.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border py-12 text-center">
-              <p className="text-sm font-medium text-muted-foreground">No portfolio media published yet.</p>
-              <p className="mt-1 text-xs text-muted-foreground">Portfolio items uploaded in Creator Hub will appear here.</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                No portfolio media published yet.
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Portfolio items uploaded in Creator Hub will appear here.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -230,15 +253,21 @@ function CreatorProfile() {
         <TabsContent value="services" className="mt-5">
           {creator.services.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border py-12 text-center">
-              <p className="text-sm font-medium text-muted-foreground">No custom packages listed yet.</p>
-              <p className="mt-1 text-xs text-muted-foreground">Send a direct collaboration request above for custom pricing.</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                No custom packages listed yet.
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Send a direct collaboration request above for custom pricing.
+              </p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {creator.services.map((s: any) => (
                 <div key={s.name || s.id} className="card-elevated hover-lift p-5">
                   <p className="font-display text-base font-semibold">{s.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">Delivery in {s.turnaround || `${s.turnaround_days || 3} days`}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Delivery in {s.turnaround || `${s.turnaround_days || 3} days`}
+                  </p>
                   <p className="mt-3 font-display text-xl font-semibold text-primary">
                     {formatMoney(s.price, creator.currency)}
                   </p>
@@ -335,7 +364,9 @@ function CreatorProfile() {
         <TabsContent value="collabs" className="mt-5">
           {creator.collaborations.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border py-12 text-center">
-              <p className="text-sm font-medium text-muted-foreground">No public brand collaborations listed yet.</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                No public brand collaborations listed yet.
+              </p>
             </div>
           ) : (
             <div className="card-elevated divide-y divide-border">

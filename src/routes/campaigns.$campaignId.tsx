@@ -289,15 +289,20 @@ function CampaignDetail() {
   });
 
   const updateBidMutation = useMutation({
-    mutationFn: ({ bidId, status }: { bidId: string; status: 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED' }) =>
-      updateBusinessCampaignApplication(c.id, bidId, status),
+    mutationFn: ({
+      bidId,
+      status,
+    }: {
+      bidId: string;
+      status: "SHORTLISTED" | "ACCEPTED" | "REJECTED";
+    }) => updateBusinessCampaignApplication(c.id, bidId, status),
     onSuccess: (data, vars) => {
       queryClient.invalidateQueries({ queryKey: ["campaign-applications", c.id] });
       queryClient.invalidateQueries({ queryKey: ["business-campaigns"] });
       queryClient.invalidateQueries({ queryKey: ["business-inquiries"] });
-      if (vars.status === 'ACCEPTED') {
+      if (vars.status === "ACCEPTED") {
         toast.success("Application accepted! Direct collaboration workspace initialized.");
-      } else if (vars.status === 'SHORTLISTED') {
+      } else if (vars.status === "SHORTLISTED") {
         toast.info("Creator bid added to shortlist.");
       } else {
         toast.warning("Application declined.");
@@ -545,7 +550,7 @@ function CampaignDetail() {
               <h3 className="mt-6 font-display text-base font-semibold">Deliverables summary</h3>
               <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                 {c.deliverables.length ? (
-                  c.deliverables.map((d) => (
+                  c.deliverables.map((d: any) => (
                     <li key={d.id} className="flex items-center justify-between">
                       <span>
                         {creatorById(d.creatorId)?.name} · {d.type}
@@ -583,7 +588,9 @@ function CampaignDetail() {
         <TabsContent value="creators" className="mt-5">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="font-display text-base font-semibold">Creator Proposals & Applications</h3>
+              <h3 className="font-display text-base font-semibold">
+                Creator Proposals & Applications
+              </h3>
               <p className="text-xs text-muted-foreground">
                 {applications.length > 0
                   ? `${applications.length} real proposals submitted from Marketplace Opportunities`
@@ -618,18 +625,19 @@ function CampaignDetail() {
                           {app.creator_name || app.name || "Creator"}
                         </Link>
                         <p className="truncate text-xs text-muted-foreground">
-                          @{app.creator_handle || app.handle || "creator"} · Submitted {app.date || "recently"}
+                          @{app.creator_handle || app.handle || "creator"} · Submitted{" "}
+                          {app.date || "recently"}
                         </p>
                       </div>
                       <Badge
                         variant={
-                          app.status === 'ACCEPTED'
-                            ? 'default'
-                            : app.status === 'SHORTLISTED'
-                            ? 'secondary'
-                            : app.status === 'REJECTED'
-                            ? 'destructive'
-                            : 'outline'
+                          app.status === "ACCEPTED"
+                            ? "default"
+                            : app.status === "SHORTLISTED"
+                              ? "secondary"
+                              : app.status === "REJECTED"
+                                ? "destructive"
+                                : "outline"
                         }
                         className="rounded-full text-xs capitalize"
                       >
@@ -641,7 +649,9 @@ function CampaignDetail() {
                       <p className="font-semibold text-foreground text-[11px] uppercase tracking-wide mb-1">
                         Creator Pitch
                       </p>
-                      <p className="whitespace-pre-wrap">{app.pitch_text || app.pitch || "No pitch notes included."}</p>
+                      <p className="whitespace-pre-wrap">
+                        {app.pitch_text || app.pitch || "No pitch notes included."}
+                      </p>
                     </div>
 
                     <div className="mt-3 flex items-center justify-between text-xs">
@@ -654,8 +664,13 @@ function CampaignDetail() {
 
                   {/* Review Action Controls */}
                   <div className="mt-4 pt-3 border-t border-border flex items-center gap-2 justify-end">
-                    {app.status === 'ACCEPTED' ? (
-                      <Button asChild size="sm" variant="default" className="rounded-xl text-xs gap-1.5">
+                    {app.status === "ACCEPTED" ? (
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="default"
+                        className="rounded-xl text-xs gap-1.5"
+                      >
                         <Link to="/messages">
                           <MessageSquare className="size-3.5" /> Open Collaboration Workspace
                         </Link>
@@ -667,7 +682,9 @@ function CampaignDetail() {
                           variant="ghost"
                           disabled={updateBidMutation.isPending}
                           className="rounded-xl text-xs text-muted-foreground hover:text-destructive"
-                          onClick={() => updateBidMutation.mutate({ bidId: app.id, status: 'REJECTED' })}
+                          onClick={() =>
+                            updateBidMutation.mutate({ bidId: app.id, status: "REJECTED" })
+                          }
                         >
                           <X className="size-3.5 mr-1" /> Decline
                         </Button>
@@ -676,7 +693,9 @@ function CampaignDetail() {
                           variant="secondary"
                           disabled={updateBidMutation.isPending}
                           className="rounded-xl text-xs"
-                          onClick={() => updateBidMutation.mutate({ bidId: app.id, status: 'SHORTLISTED' })}
+                          onClick={() =>
+                            updateBidMutation.mutate({ bidId: app.id, status: "SHORTLISTED" })
+                          }
                         >
                           Shortlist
                         </Button>
@@ -685,7 +704,9 @@ function CampaignDetail() {
                           variant="default"
                           disabled={updateBidMutation.isPending}
                           className="rounded-xl text-xs gap-1"
-                          onClick={() => updateBidMutation.mutate({ bidId: app.id, status: 'ACCEPTED' })}
+                          onClick={() =>
+                            updateBidMutation.mutate({ bidId: app.id, status: "ACCEPTED" })
+                          }
                         >
                           <Check className="size-3.5 mr-1" /> Accept Proposal
                         </Button>
@@ -697,7 +718,7 @@ function CampaignDetail() {
             </div>
           ) : c.creators && c.creators.length > 0 ? (
             <div className="grid gap-4 lg:grid-cols-2">
-              {c.creators.map((cc) => {
+              {c.creators.map((cc: any) => {
                 const cr = creatorById(cc.creatorId);
                 if (!cr) return null;
                 return (
@@ -720,11 +741,15 @@ function CampaignDetail() {
                     </div>
                     <div className="mt-4 grid grid-cols-3 gap-3 rounded-xl bg-secondary/60 p-3 text-center text-xs">
                       <div>
-                        <p className="font-display text-sm font-semibold">{cc.deliverables.length}</p>
+                        <p className="font-display text-sm font-semibold">
+                          {cc.deliverables.length}
+                        </p>
                         <p className="text-muted-foreground">Deliverables</p>
                       </div>
                       <div>
-                        <p className="font-display text-sm font-semibold">{formatMoney(cc.budget)}</p>
+                        <p className="font-display text-sm font-semibold">
+                          {formatMoney(cc.budget)}
+                        </p>
                         <p className="text-muted-foreground">Budget</p>
                       </div>
                       <div>
@@ -759,7 +784,7 @@ function CampaignDetail() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {c.deliverables.map((d) => (
+                {c.deliverables.map((d: any) => (
                   <tr key={d.id}>
                     <td className="px-5 py-3.5">{creatorById(d.creatorId)?.name}</td>
                     <td className="px-5 py-3.5">

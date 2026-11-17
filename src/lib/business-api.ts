@@ -31,6 +31,7 @@ export interface BusinessProfileData {
     name: string;
     full_path?: string;
   } | null;
+  subscription_plan?: string;
   created_at: string;
 }
 
@@ -160,14 +161,19 @@ export function mapBackendCreatorToCreator(c: any): Creator {
       c.cover_url ||
       "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
     verified: Boolean(c.verified ?? c.is_verified),
-    socialConnected: Boolean(c.social_accounts?.length || c.social_connected || c.platforms?.length),
+    socialConnected: Boolean(
+      c.social_accounts?.length || c.social_connected || c.platforms?.length,
+    ),
     category: c.category || "General",
     secondaryCategories: [],
     location: c.full_location || formattedLocation,
     languages: c.languages?.length ? c.languages : ["Malayalam", "English"],
     bio: c.bio || "Content Creator on Influencers.com",
     about: c.about || c.bio || "No biography provided yet.",
-    mainPlatform: (c.main_platform || c.platforms?.[0] || c.social_accounts?.[0]?.platform || "Instagram") as any,
+    mainPlatform: (c.main_platform ||
+      c.platforms?.[0] ||
+      c.social_accounts?.[0]?.platform ||
+      "Instagram") as any,
     followers: c.followers ?? c.followers_count ?? 0,
     engagement: c.engagement ?? c.engagement_rate ?? 0,
     startingPrice: c.startingPrice ?? c.starting_price ?? c.min_service_price ?? 0,
@@ -204,7 +210,9 @@ export function mapBackendCreatorToCreator(c: any): Creator {
       countryCode: (c.location?.countryCode || c.country_code || "IN").toUpperCase(),
     },
     currency: (c.currency || "INR") as any,
-    serviceAreas: c.serviceLocations?.length ? c.serviceLocations : (c.service_areas || [city, "Remote"]),
+    serviceAreas: c.serviceLocations?.length
+      ? c.serviceLocations
+      : c.service_areas || [city, "Remote"],
     remote: Boolean(c.remote ?? true),
     travel: Boolean(c.travels ?? c.travel ?? false),
   };
@@ -268,7 +276,7 @@ export async function getBusinessProfile(): Promise<BusinessProfileData> {
 }
 
 export async function updateBusinessProfile(
-  payload: Partial<BusinessProfileData>
+  payload: Partial<BusinessProfileData>,
 ): Promise<BusinessProfileData> {
   const response = await apiClient.patch<BusinessProfileData>("/business/profile/", payload);
   if (typeof window !== "undefined") {
@@ -318,7 +326,9 @@ export async function getTaxonomyCategories(): Promise<TaxonomyCategory[]> {
 }
 
 export async function searchTaxonomyLocations(query: string): Promise<TaxonomyLocation[]> {
-  const response = await apiClient.get(`/public/taxonomies/locations/?search=${encodeURIComponent(query)}`);
+  const response = await apiClient.get(
+    `/public/taxonomies/locations/?search=${encodeURIComponent(query)}`,
+  );
   return response.data.results || response.data || [];
 }
 
@@ -327,7 +337,10 @@ export async function searchTaxonomyLocations(query: string): Promise<TaxonomyLo
 // -----------------------------------------------------------------------------
 
 export async function getBusinessCampaigns(status?: string | any): Promise<CampaignData[]> {
-  const statusStr = typeof status === "string" && status !== "All" && !status.startsWith("[object") ? status : undefined;
+  const statusStr =
+    typeof status === "string" && status !== "All" && !status.startsWith("[object")
+      ? status
+      : undefined;
   const url = statusStr
     ? `/business/campaigns/?status=${encodeURIComponent(statusStr)}`
     : "/business/campaigns/";
@@ -353,7 +366,7 @@ export async function createBusinessCampaign(payload: {
 
 export async function updateBusinessCampaign(
   id: string,
-  payload: Record<string, any>
+  payload: Record<string, any>,
 ): Promise<CampaignData> {
   const response = await apiClient.patch<CampaignData>(`/business/campaigns/${id}/`, payload);
   return response.data;
@@ -361,7 +374,7 @@ export async function updateBusinessCampaign(
 
 export async function uploadBusinessMedia(
   file: File,
-  fileType: "COVER" | "LOGO" = "COVER"
+  fileType: "COVER" | "LOGO" = "COVER",
 ): Promise<{ id: string; url: string }> {
   const formData = new FormData();
   formData.append("file", file);
@@ -392,25 +405,29 @@ export interface CampaignApplicationBid {
   currency: string;
   pitch_text?: string;
   pitch?: string;
-  status: 'PENDING' | 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED';
+  status: "PENDING" | "SHORTLISTED" | "ACCEPTED" | "REJECTED";
   date?: string;
   created_at: string;
   inquiry_id?: string;
 }
 
-export async function getBusinessCampaignApplications(campaignId: string): Promise<CampaignApplicationBid[]> {
-  const response = await apiClient.get<CampaignApplicationBid[]>(`/business/campaigns/${campaignId}/applications/`);
+export async function getBusinessCampaignApplications(
+  campaignId: string,
+): Promise<CampaignApplicationBid[]> {
+  const response = await apiClient.get<CampaignApplicationBid[]>(
+    `/business/campaigns/${campaignId}/applications/`,
+  );
   return Array.isArray(response.data) ? response.data : (response.data as any).results || [];
 }
 
 export async function updateBusinessCampaignApplication(
   campaignId: string,
   bidId: string,
-  status: 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED'
+  status: "SHORTLISTED" | "ACCEPTED" | "REJECTED",
 ): Promise<CampaignApplicationBid> {
   const response = await apiClient.patch<CampaignApplicationBid>(
     `/business/campaigns/${campaignId}/applications/${bidId}/`,
-    { status }
+    { status },
   );
   return response.data;
 }
@@ -526,8 +543,13 @@ export async function getBusinessInquiryMessages(id: string): Promise<BusinessIn
   return Array.isArray(res.data) ? res.data : (res.data as any).results || [];
 }
 
-export async function sendBusinessInquiryMessage(id: string, body: string): Promise<BusinessInquiryMessage> {
-  const res = await apiClient.post<BusinessInquiryMessage>(`/business/inquiries/${id}/messages/`, { body });
+export async function sendBusinessInquiryMessage(
+  id: string,
+  body: string,
+): Promise<BusinessInquiryMessage> {
+  const res = await apiClient.post<BusinessInquiryMessage>(`/business/inquiries/${id}/messages/`, {
+    body,
+  });
   return res.data;
 }
 
@@ -576,7 +598,11 @@ export async function getBusinessShortlists(): Promise<BusinessShortlist[]> {
   return Array.isArray(res.data) ? res.data : (res.data as any).results || [];
 }
 
-export async function createBusinessShortlist(payload: { name: string; description?: string; color?: string }): Promise<BusinessShortlist> {
+export async function createBusinessShortlist(payload: {
+  name: string;
+  description?: string;
+  color?: string;
+}): Promise<BusinessShortlist> {
   const res = await apiClient.post<BusinessShortlist>("/business/shortlists/", payload);
   return res.data;
 }
@@ -586,7 +612,10 @@ export async function getBusinessShortlistDetail(id: string): Promise<BusinessSh
   return res.data;
 }
 
-export async function updateBusinessShortlist(id: string, payload: Partial<{ name: string; description: string; color: string }>): Promise<BusinessShortlist> {
+export async function updateBusinessShortlist(
+  id: string,
+  payload: Partial<{ name: string; description: string; color: string }>,
+): Promise<BusinessShortlist> {
   const res = await apiClient.patch<BusinessShortlist>(`/business/shortlists/${id}/`, payload);
   return res.data;
 }
@@ -595,17 +624,33 @@ export async function deleteBusinessShortlist(id: string): Promise<void> {
   await apiClient.delete(`/business/shortlists/${id}/`);
 }
 
-export async function addCreatorToShortlist(shortlistId: string, creatorId: string, notes?: string): Promise<ShortlistCreatorEntry> {
-  const res = await apiClient.post<ShortlistCreatorEntry>(`/business/shortlists/${shortlistId}/creators/`, { creator_id: creatorId, notes });
+export async function addCreatorToShortlist(
+  shortlistId: string,
+  creatorId: string,
+  notes?: string,
+): Promise<ShortlistCreatorEntry> {
+  const res = await apiClient.post<ShortlistCreatorEntry>(
+    `/business/shortlists/${shortlistId}/creators/`,
+    { creator_id: creatorId, notes },
+  );
   return res.data;
 }
 
-export async function removeCreatorFromShortlist(shortlistId: string, creatorId: string): Promise<void> {
+export async function removeCreatorFromShortlist(
+  shortlistId: string,
+  creatorId: string,
+): Promise<void> {
   await apiClient.delete(`/business/shortlists/${shortlistId}/creators/${creatorId}/`);
 }
 
-export async function toggleCreatorShortlist(creatorId: string, shortlistId?: string): Promise<{ is_saved: boolean; shortlist_id: string; shortlist_name: string; detail: string }> {
-  const res = await apiClient.post("/business/shortlists/toggle/", { creator_id: creatorId, shortlist_id: shortlistId });
+export async function toggleCreatorShortlist(
+  creatorId: string,
+  shortlistId?: string,
+): Promise<{ is_saved: boolean; shortlist_id: string; shortlist_name: string; detail: string }> {
+  const res = await apiClient.post("/business/shortlists/toggle/", {
+    creator_id: creatorId,
+    shortlist_id: shortlistId,
+  });
   return res.data;
 }
 
@@ -655,7 +700,7 @@ export async function createBusinessSavedSearch(payload: {
 
 export async function updateBusinessSavedSearch(
   id: string,
-  payload: Partial<{ name: string; filters: Record<string, any>; notify: boolean }>
+  payload: Partial<{ name: string; filters: Record<string, any>; notify: boolean }>,
 ): Promise<SavedSearchData> {
   const res = await apiClient.patch<SavedSearchData>(`/business/saved-searches/${id}/`, payload);
   return res.data;
@@ -665,7 +710,10 @@ export async function deleteBusinessSavedSearch(id: string): Promise<void> {
   await apiClient.delete(`/business/saved-searches/${id}/`);
 }
 
-export async function toggleSavedSearchNotify(id: string, notify?: boolean): Promise<{
+export async function toggleSavedSearchNotify(
+  id: string,
+  notify?: boolean,
+): Promise<{
   id: string;
   notify: boolean;
   notify_enabled: boolean;
@@ -728,7 +776,3 @@ export async function getBusinessNotifications(): Promise<BusinessNotificationIt
 export async function markBusinessNotificationRead(id: string): Promise<void> {
   await apiClient.post(`/business/notifications/${id}/read/`);
 }
-
-
-
-

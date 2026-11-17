@@ -20,7 +20,7 @@ import {
 import {
   getBusinessShortlists,
   createBusinessShortlist,
-  type BusinessShortlist
+  type BusinessShortlist,
 } from "@/lib/business-api";
 
 export const Route = createFileRoute("/shortlists/")({
@@ -53,7 +53,8 @@ function Shortlists() {
   });
 
   const createMutation = useMutation({
-    mutationFn: () => createBusinessShortlist({ name: name.trim(), description: description.trim(), color }),
+    mutationFn: () =>
+      createBusinessShortlist({ name: name.trim(), description: description.trim(), color }),
     onSuccess: (newShortlist) => {
       toast.success(`Shortlist "${newShortlist.name}" created successfully!`);
       queryClient.invalidateQueries({ queryKey: ["business-shortlists"] });
@@ -140,7 +141,13 @@ function Shortlists() {
               </div>
 
               <p className="mt-auto pt-4 text-xs text-muted-foreground">
-                Updated {s.updated_at ? new Date(s.updated_at).toLocaleDateString([], { month: "short", day: "numeric" }) : "Recently"}
+                Updated{" "}
+                {s.updated_at
+                  ? new Date(s.updated_at).toLocaleDateString([], {
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "Recently"}
               </p>
             </Link>
           ))}
@@ -151,7 +158,9 @@ function Shortlists() {
           >
             <FolderPlus className="size-7" />
             <span className="mt-2 text-sm font-semibold">Create a new collection</span>
-            <span className="text-xs text-muted-foreground mt-0.5">Organize creators for your campaign</span>
+            <span className="text-xs text-muted-foreground mt-0.5">
+              Organize creators for your campaign
+            </span>
           </button>
         </div>
       )}
@@ -180,7 +189,9 @@ function Shortlists() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-foreground">Description (Optional)</label>
+              <label className="text-xs font-semibold text-foreground">
+                Description (Optional)
+              </label>
               <Textarea
                 placeholder="Brief notes about the goals of this collection..."
                 value={description}
@@ -199,7 +210,9 @@ function Shortlists() {
                     type="button"
                     onClick={() => setColor(c.key)}
                     className={`size-7 rounded-full ${c.ring} transition-transform ${
-                      color === c.key ? "scale-125 ring-2 ring-offset-2 ring-primary" : "opacity-75 hover:opacity-100"
+                      color === c.key
+                        ? "scale-125 ring-2 ring-offset-2 ring-primary"
+                        : "opacity-75 hover:opacity-100"
                     }`}
                     title={c.label}
                   />
@@ -221,4 +234,3 @@ function Shortlists() {
     </AppShell>
   );
 }
-

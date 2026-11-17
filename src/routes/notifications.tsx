@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import {
   getBusinessNotifications,
   markBusinessNotificationRead,
-  type BusinessNotificationItem
+  type BusinessNotificationItem,
 } from "@/lib/business-api";
 import type { AppNotification } from "@/data/mock";
 
@@ -97,8 +97,7 @@ function Notifications() {
     read: Boolean(n.is_read),
   }));
 
-  const list =
-    tab === "all" ? notificationsList : notificationsList.filter((n) => !n.read);
+  const list = tab === "all" ? notificationsList : notificationsList.filter((n) => !n.read);
 
   const unreadItems = notificationsList.filter((n) => !n.read);
 
@@ -168,11 +167,7 @@ function Notifications() {
           </div>
         ) : (
           list.map((n) => (
-            <div
-              key={n.id}
-              onClick={() => handleItemClick(n)}
-              className="cursor-pointer"
-            >
+            <div key={n.id} onClick={() => handleItemClick(n)} className="cursor-pointer">
               <NotificationItem notification={n} />
             </div>
           ))

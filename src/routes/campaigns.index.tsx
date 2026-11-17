@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CalendarDays, ImagePlus, Plus, Upload, Users, Sparkles, MessageSquare } from "lucide-react";
+import {
+  CalendarDays,
+  ImagePlus,
+  Plus,
+  Upload,
+  Users,
+  Sparkles,
+  MessageSquare,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -165,7 +173,7 @@ function Campaigns() {
         brief: newBrief.trim(),
         location_text: newLocation.trim(),
         creators_needed: newCreatorsNeeded,
-        cover_image_url: newCoverImage.trim() || undefined,
+        ...(newCoverImage.trim() ? { cover_image_url: newCoverImage.trim() } : {}),
       });
 
       toast.success("Campaign created successfully!");
@@ -333,7 +341,11 @@ function Campaigns() {
                     </div>
                     {newCoverImage && (
                       <div className="mt-2 relative h-24 w-full overflow-hidden rounded-xl border bg-muted">
-                        <img src={newCoverImage} alt="Cover preview" className="h-full w-full object-cover" />
+                        <img
+                          src={newCoverImage}
+                          alt="Cover preview"
+                          className="h-full w-full object-cover"
+                        />
                       </div>
                     )}
                   </div>
@@ -367,7 +379,7 @@ function Campaigns() {
               "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
               filter === s
                 ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-card text-muted-foreground hover:text-foreground"
+                : "border-border bg-card text-muted-foreground hover:text-foreground",
             )}
           >
             {s}
@@ -379,9 +391,12 @@ function Campaigns() {
         {list.length === 0 ? (
           <div className="col-span-full rounded-2xl border border-dashed border-border p-12 text-center">
             <Sparkles className="mx-auto size-8 text-muted-foreground/40" />
-            <h3 className="mt-3 font-display text-base font-semibold">No engagements in "{filter}"</h3>
+            <h3 className="mt-3 font-display text-base font-semibold">
+              No engagements in "{filter}"
+            </h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Launch a new campaign or reach out to creators directly to start active collaborations.
+              Launch a new campaign or reach out to creators directly to start active
+              collaborations.
             </p>
             <div className="mt-4 flex items-center justify-center gap-2">
               <Button size="sm" onClick={() => setDialogOpen(true)} className="rounded-xl text-xs">
@@ -396,7 +411,7 @@ function Campaigns() {
           list.map((c: any) => {
             const title = c.title || c.name;
             const category = c.category || c.category_name || "General";
-            const budget = c.budget ?? ((c.total_budget_cents || 0) / 100);
+            const budget = c.budget ?? (c.total_budget_cents || 0) / 100;
             const brief = c.brief || c.objective || "Brand collaboration campaign.";
             const creatorCount = c.creatorCount || 1;
             const progress = c.progress ?? 35;
@@ -428,7 +443,8 @@ function Campaigns() {
                 <div className="mt-4 flex items-center justify-between text-sm">
                   <span className="font-display font-semibold">{formatMoney(budget, "INR")}</span>
                   <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-                    <Users className="size-4" /> {creatorCount} {creatorCount === 1 ? "creator" : "creators"}
+                    <Users className="size-4" /> {creatorCount}{" "}
+                    {creatorCount === 1 ? "creator" : "creators"}
                   </span>
                 </div>
 

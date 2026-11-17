@@ -56,7 +56,9 @@ function SavedSearches() {
       queryClient.invalidateQueries({ queryKey: ["business-saved-searches"] });
     },
     onError: (err: any) => {
-      toast.error("Failed to update notification setting: " + (err.response?.data?.detail || err.message));
+      toast.error(
+        "Failed to update notification setting: " + (err.response?.data?.detail || err.message),
+      );
     },
   });
 
@@ -102,7 +104,8 @@ function SavedSearches() {
           </div>
           <h3 className="font-display font-semibold text-base">No saved searches yet</h3>
           <p className="text-xs text-muted-foreground">
-            Save custom creator search configurations and receive alerts as soon as new matching creators join.
+            Save custom creator search configurations and receive alerts as soon as new matching
+            creators join.
           </p>
           <Button asChild className="rounded-xl mt-2">
             <Link to="/discover">Discover Creators</Link>
@@ -117,7 +120,7 @@ function SavedSearches() {
                 ...(s.locations || []),
                 ...(s.languages || []),
                 ...(s.platforms || []),
-              ])
+              ]),
             );
 
             return (
@@ -140,7 +143,11 @@ function SavedSearches() {
 
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {tags.map((t, idx) => (
-                    <Badge key={`${t}-${idx}`} variant="secondary" className="rounded-full font-normal">
+                    <Badge
+                      key={`${t}-${idx}`}
+                      variant="secondary"
+                      className="rounded-full font-normal"
+                    >
                       {t}
                     </Badge>
                   ))}

@@ -35,7 +35,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("business_access_token") : null;
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("business_access_token") : null;
     if (token) {
       fetchProfile();
     } else {
@@ -92,4 +93,3 @@ export function useAuth() {
   }
   return context;
 }
-

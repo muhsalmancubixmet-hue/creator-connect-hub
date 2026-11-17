@@ -71,7 +71,10 @@ function Settings() {
       setContactEmail(profile.contact_email || business?.contact_email || "");
       setContactPhone(profile.contact_phone || business?.contact_phone || "");
       setCompanyName(profile.company_name || business?.company_name || "");
-      if (profile.notification_preferences && typeof profile.notification_preferences === "object") {
+      if (
+        profile.notification_preferences &&
+        typeof profile.notification_preferences === "object"
+      ) {
         setPrefs((prev) => ({ ...prev, ...profile.notification_preferences }));
       }
     } else if (business) {
@@ -182,7 +185,10 @@ function Settings() {
               const checked = prefs[key] !== undefined ? prefs[key] : defaultVal;
               return (
                 <div key={key} className="flex items-center justify-between gap-4">
-                  <Label htmlFor={`pref-${key}`} className="text-sm font-normal text-muted-foreground cursor-pointer">
+                  <Label
+                    htmlFor={`pref-${key}`}
+                    className="text-sm font-normal text-muted-foreground cursor-pointer"
+                  >
                     {label}
                   </Label>
                   {mounted ? (
@@ -206,7 +212,9 @@ function Settings() {
           <p className="text-sm text-muted-foreground">
             Current subscription tier:{" "}
             <span className="font-semibold text-foreground">
-              {profile?.verification_status === "VERIFIED" ? "Verified Business Workspace" : "Standard Brand Account"}
+              {profile?.verification_status === "VERIFIED"
+                ? "Verified Business Workspace"
+                : "Standard Brand Account"}
             </span>
           </p>
           <div className="mt-4 space-y-2">
@@ -242,11 +250,7 @@ function Settings() {
             </Button>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Button
-              variant="destructive"
-              className="rounded-xl"
-              onClick={handleLogout}
-            >
+            <Button variant="destructive" className="rounded-xl" onClick={handleLogout}>
               <LogOut className="size-4" /> Logout
             </Button>
           </div>

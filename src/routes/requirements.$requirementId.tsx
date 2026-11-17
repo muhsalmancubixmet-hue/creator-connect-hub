@@ -40,7 +40,9 @@ export const Route = createFileRoute("/requirements/$requirementId")({
             minEngagement: 3.5,
             startDate: data.created_at ? data.created_at.split("T")[0] : "Immediate",
             deadline: data.deadline || "Open",
-            instructions: data.description || "Follow brand campaign guidelines and deliver agreed content on schedule.",
+            instructions:
+              data.description ||
+              "Follow brand campaign guidelines and deliver agreed content on schedule.",
             matches: [] as Array<{ creatorId: string; match: number }>,
           },
         };

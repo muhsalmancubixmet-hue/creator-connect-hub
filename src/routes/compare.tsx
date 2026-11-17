@@ -61,9 +61,7 @@ function Compare() {
 
   // Blend live backend profiles with mock fallback if offline or testing demo IDs
   const selected: Creator[] =
-    liveCreators.length > 0
-      ? liveCreators
-      : creators.filter((c) => idList.includes(c.id));
+    liveCreators.length > 0 ? liveCreators : creators.filter((c) => idList.includes(c.id));
 
   const rows: { label: string; render: (c: Creator) => React.ReactNode }[] = [
     { label: "Followers", render: (c) => formatFollowers(c.followers) },
@@ -72,8 +70,7 @@ function Compare() {
     { label: "Category", render: (c) => (c.category as string) || "General" },
     {
       label: "Languages",
-      render: (c) =>
-        c.languages?.length ? c.languages.join(", ") : "English, Malayalam",
+      render: (c) => (c.languages?.length ? c.languages.join(", ") : "English, Malayalam"),
     },
     {
       label: "Platforms",
@@ -85,9 +82,7 @@ function Compare() {
     {
       label: "Services",
       render: (c) =>
-        c.services?.length
-          ? c.services.map((s) => s.name).join(", ")
-          : "Brand Collaborations",
+        c.services?.length ? c.services.map((s) => s.name).join(", ") : "Brand Collaborations",
     },
     {
       label: "Starting price",
@@ -103,9 +98,7 @@ function Compare() {
     {
       label: "Previous collaborations",
       render: (c) =>
-        c.collaborations?.length
-          ? c.collaborations.map((x) => x.brand).join(", ")
-          : "—",
+        c.collaborations?.length ? c.collaborations.map((x) => x.brand).join(", ") : "—",
     },
     { label: "Response rate", render: (c) => `${c.responseRate || 95}%` },
   ];
@@ -120,9 +113,7 @@ function Compare() {
             <Button
               className="rounded-xl"
               onClick={() =>
-                toast.success(
-                  `Collaboration request drafted for ${selected.length} creators`,
-                )
+                toast.success(`Collaboration request drafted for ${selected.length} creators`)
               }
             >
               <MessageSquare className="size-4" /> Contact Selected Creators
@@ -134,9 +125,7 @@ function Compare() {
       {isLoading ? (
         <div className="flex h-64 items-center justify-center">
           <Loader2 className="size-6 animate-spin text-primary" />
-          <span className="ml-2 text-xs text-muted-foreground">
-            Loading creator comparison...
-          </span>
+          <span className="ml-2 text-xs text-muted-foreground">Loading creator comparison...</span>
         </div>
       ) : selected.length === 0 ? (
         <EmptyState
@@ -181,9 +170,7 @@ function Compare() {
             <tbody>
               {rows.map((r, i) => (
                 <tr key={r.label} className={i % 2 ? "bg-secondary/40" : ""}>
-                  <td className="px-5 py-3.5 font-medium text-muted-foreground">
-                    {r.label}
-                  </td>
+                  <td className="px-5 py-3.5 font-medium text-muted-foreground">{r.label}</td>
                   {selected.map((c) => (
                     <td key={c.id} className="border-l border-border px-5 py-3.5">
                       {r.render(c)}

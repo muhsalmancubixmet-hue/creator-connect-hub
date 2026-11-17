@@ -118,9 +118,7 @@ function Analytics() {
         {stats.map((s, idx) => {
           // If this is the spend card, format using user-selected currency
           const displayVal =
-            idx === 3 && analytics
-              ? formatMoney(analytics.total_spend || 0, "INR")
-              : s.value;
+            idx === 3 && analytics ? formatMoney(analytics.total_spend || 0, "INR") : s.value;
 
           return (
             <div key={s.label} className="card-elevated p-5">

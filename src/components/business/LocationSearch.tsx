@@ -59,7 +59,7 @@ export function LocationSearch({
               lat: Number(d.latitude || 0),
               lng: Number(d.longitude || 0),
               type: d.type || "city",
-            }))
+            })),
           );
         } else {
           setRemote([]);

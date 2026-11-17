@@ -146,12 +146,8 @@ function PlanCard() {
   const planName = business?.subscription_plan || "Free";
   return (
     <div className="rounded-2xl border border-border gradient-hero p-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-        {planName}
-      </p>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Active workspace plan
-      </p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-primary">{planName}</p>
+      <p className="mt-1 text-sm text-muted-foreground">Active workspace plan</p>
       <Button asChild size="sm" className="mt-3 w-full rounded-xl">
         <Link to="/subscription">Manage plan</Link>
       </Button>
@@ -246,9 +242,7 @@ function ProfileMenu() {
             <AvatarImage src={logo} alt={name} />
             <AvatarFallback className="rounded-lg text-xs">{initials}</AvatarFallback>
           </Avatar>
-          <span className="hidden max-w-[140px] truncate text-sm font-medium sm:block">
-            {name}
-          </span>
+          <span className="hidden max-w-[140px] truncate text-sm font-medium sm:block">{name}</span>
           <ChevronDown className="size-4 text-muted-foreground" />
         </button>
       </DropdownMenuTrigger>
@@ -274,7 +268,10 @@ function ProfileMenu() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout} className="cursor-pointer text-destructive focus:text-destructive">
+        <DropdownMenuItem
+          onClick={logout}
+          className="cursor-pointer text-destructive focus:text-destructive"
+        >
           <LogOut className="size-4" /> Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -329,12 +326,7 @@ function Header() {
       </form>
 
       <div className="ml-auto flex items-center gap-1.5">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-xl md:hidden"
-          asChild
-        >
+        <Button variant="ghost" size="icon" className="rounded-xl md:hidden" asChild>
           <Link to="/discover">
             <Search className="size-5" />
           </Link>
@@ -386,7 +378,10 @@ function CurrencySwitcher() {
   const currency = useDisplayCurrency();
   return (
     <Select value={currency} onValueChange={(v) => setDisplayCurrency(v as CurrencyCode)}>
-      <SelectTrigger aria-label="Display currency" className="h-9 w-[76px] rounded-xl text-xs font-medium">
+      <SelectTrigger
+        aria-label="Display currency"
+        className="h-9 w-[76px] rounded-xl text-xs font-medium"
+      >
         <span>{currency}</span>
       </SelectTrigger>
       <SelectContent>

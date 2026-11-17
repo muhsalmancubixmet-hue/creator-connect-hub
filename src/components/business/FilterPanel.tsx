@@ -89,7 +89,9 @@ export function applyFilters(creators: Creator[], f: Filters, sort: SortKey): Cr
       return false;
     if (
       f.categories.length &&
-      !f.categories.some((cat) => c.category === cat || c.secondaryCategories.includes(cat as never))
+      !f.categories.some(
+        (cat) => c.category === cat || c.secondaryCategories.includes(cat as never),
+      )
     )
       return false;
     if (f.countries.length && !f.countries.includes(c.geo.country)) return false;
@@ -115,9 +117,8 @@ export function applyFilters(creators: Creator[], f: Filters, sort: SortKey): Cr
   const sorted = [...list];
   if (sort === "followers") sorted.sort((a, b) => b.followers - a.followers);
   if (sort === "engagement") sorted.sort((a, b) => b.engagement - a.engagement);
-  if (sort === "price") sorted.sort(
-      (a, b) => toUSD(a.startingPrice, a.currency) - toUSD(b.startingPrice, b.currency),
-    );
+  if (sort === "price")
+    sorted.sort((a, b) => toUSD(a.startingPrice, a.currency) - toUSD(b.startingPrice, b.currency));
   if (sort === "recent") sorted.sort((a, b) => a.lastActiveDays - b.lastActiveDays);
   return sorted;
 }
@@ -199,7 +200,9 @@ export function FilterPanel({
   const regionOptions = uniq(inCountry.map((c) => c.geo.region));
   const cityOptions = uniq(
     inCountry
-      .filter((c) => !filters.regions.length || (c.geo.region && filters.regions.includes(c.geo.region)))
+      .filter(
+        (c) => !filters.regions.length || (c.geo.region && filters.regions.includes(c.geo.region)),
+      )
       .map((c) => c.geo.city),
   );
 
@@ -230,10 +233,7 @@ export function FilterPanel({
       <Separator />
       <div className="space-y-3">
         <p className="font-display text-sm font-semibold">Location</p>
-        <LocationSearch
-          value={filters.near}
-          onSelect={(near) => onChange({ ...filters, near })}
-        />
+        <LocationSearch value={filters.near} onSelect={(near) => onChange({ ...filters, near })} />
         {filters.near && (
           <div>
             <Slider
@@ -336,8 +336,7 @@ export function FilterPanel({
           }
         />
         <p className="mt-2 text-xs text-muted-foreground">
-          {formatMoney(filters.budget[0], "USD")} –{" "}
-          {formatMoney(filters.budget[1], "USD")}
+          {formatMoney(filters.budget[0], "USD")} – {formatMoney(filters.budget[1], "USD")}
           {filters.budget[1] >= BUDGET_MAX_USD ? "+" : ""}
         </p>
       </div>
