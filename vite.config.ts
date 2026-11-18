@@ -19,6 +19,6 @@ export default defineConfig({
     server: { entry: "server" },
   },
   nitro: {
-    preset: process.env.VERCEL ? "vercel" : "cloudflare-module",
+    preset: process.env["VERCEL"] ? "vercel" : "cloudflare-module",
   },
 });
