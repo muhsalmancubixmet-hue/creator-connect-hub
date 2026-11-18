@@ -105,7 +105,8 @@ export function applyFilters(creators: Creator[], f: Filters, sort: SortKey): Cr
       return false;
     if (f.services.length && !f.services.some((s) => c.services.some((cs) => cs.name === s)))
       return false;
-    if (c.followers < f.followers[0] || c.followers > f.followers[1]) return false;
+    if (c.followers < f.followers[0] || (f.followers[1] < 1000000 && c.followers > f.followers[1]))
+      return false;
     if (c.engagement < f.minEngagement) return false;
     const usd = toUSD(c.startingPrice, c.currency);
     if (usd < f.budget[0] || (f.budget[1] < BUDGET_MAX_USD && usd > f.budget[1])) return false;
@@ -298,6 +299,7 @@ export function FilterPanel({
         />
         <p className="mt-2 text-xs text-muted-foreground">
           {formatFollowers(filters.followers[0])} – {formatFollowers(filters.followers[1])}
+          {filters.followers[1] >= 1000000 ? "+" : ""}
         </p>
       </div>
 

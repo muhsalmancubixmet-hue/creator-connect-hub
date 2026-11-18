@@ -185,9 +185,17 @@ export function mapBackendCreatorToCreator(c: any): Creator {
       turnaround: s.turnaround || `${s.delivery_time_days || s.turnaround_days || 3} days`,
       price: s.price ?? (s.starting_price_cents ? s.starting_price_cents / 100 : 0),
     })),
-    socials: (c.social_accounts || []).map((s: any) => ({
-      platform: s.platform || s.platform_name,
-      handle: s.handle,
+    socials: (c.social_accounts?.length
+      ? c.social_accounts
+      : (c.platforms || []).map((p: string) => ({
+          platform: p,
+          handle: c.handle || "",
+          followers: c.followers ?? 0,
+          engagement: c.engagement ?? 0,
+        }))
+    ).map((s: any) => ({
+      platform: s.platform || s.platform_name || s,
+      handle: s.handle || c.handle || "",
       followers: s.followers_count ?? s.followers ?? 0,
       engagement: s.engagement_rate ?? s.engagement ?? 0,
     })),
@@ -206,6 +214,7 @@ export function mapBackendCreatorToCreator(c: any): Creator {
       lat: Number(c.location?.lat ?? c.latitude ?? 11.2758),
       lng: Number(c.location?.lng ?? c.longitude ?? 76.2263),
       city: city,
+      region: c.location?.region || c.state || district || city,
       country: country,
       countryCode: (c.location?.countryCode || c.country_code || "IN").toUpperCase(),
     },
