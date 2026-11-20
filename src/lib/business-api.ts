@@ -388,9 +388,7 @@ export async function uploadBusinessMedia(
   const formData = new FormData();
   formData.append("file", file);
   formData.append("file_type", fileType);
-  const response = await apiClient.post("/business/media/upload/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await apiClient.post("/business/media/upload/", formData);
   return response.data;
 }
 
