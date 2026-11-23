@@ -23,6 +23,14 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // If request payload is FormData, strip application/json header so Axios
+    // preserves FormData and allows the browser to attach the multipart boundary
+    if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+      if (config.headers) {
+        delete config.headers["Content-Type"];
+        delete config.headers["content-type"];
+      }
+    }
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("business_access_token");
       if (token && config.headers) {
