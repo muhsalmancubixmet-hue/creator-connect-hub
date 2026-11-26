@@ -123,10 +123,12 @@ export function detectContactLeakage(rawText: string): ContactGuardResult {
     EXTERNAL_MESSENGER: "external chat/WhatsApp link",
   };
 
+  const firstViolation = violations[0];
+  const primaryLabel = firstViolation ? labelMap[firstViolation] : "contact details";
   return {
     isBlocked: true,
     violations,
-    matchedSnippet,
-    reason: `Sharing ${labelMap[violations[0]]} in chat is blocked for Escrow protection. Keep negotiations inside Influencers.com until milestone lock.`,
+    ...(matchedSnippet ? { matchedSnippet } : {}),
+    reason: `Sharing ${primaryLabel} in chat is blocked for Escrow protection. Keep negotiations inside Influencers.com until milestone lock.`,
   };
 }
