@@ -126,6 +126,9 @@ function Messages() {
     onMessagesRead: () => {
       queryClient.invalidateQueries({ queryKey: ["business-unread-count"] });
     },
+    onError: (err) => {
+      toast.error(err.detail);
+    },
   });
 
   const { data: messages = [], isLoading: loadingMessages } = useQuery({
