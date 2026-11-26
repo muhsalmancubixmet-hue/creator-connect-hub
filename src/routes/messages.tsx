@@ -6,9 +6,11 @@ import {
   Paperclip,
   Search,
   Send,
+  ShieldAlert,
+  ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -20,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 import { useInquirySocket } from "@/lib/use-inquiry-socket";
+import { detectContactLeakage } from "@/lib/contact-guard";
 import {
   getBusinessInquiries,
   getBusinessInquiryMessages,
@@ -166,8 +169,14 @@ function Messages() {
     },
   });
 
+  const contactGuard = useMemo(() => detectContactLeakage(draft), [draft]);
+
   const handleSend = () => {
     if (!draft.trim() || sendMutation.isPending) return;
+    if (contactGuard.isBlocked) {
+      toast.error(contactGuard.reason);
+      return;
+    }
     const text = draft.trim();
     setDraft("");
 
@@ -445,6 +454,21 @@ function Messages() {
 
               {/* Input Area */}
               <div className="border-t border-border p-3 bg-card/30">
+                {contactGuard.isBlocked && (
+                  <div className="mb-2 flex items-start gap-2 rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2 text-[11px] font-medium text-destructive">
+                    <ShieldAlert className="mt-0.5 size-4 shrink-0" />
+                    <div>
+                      <p className="font-semibold">Contact Sharing Blocked</p>
+                      <p className="opacity-90">{contactGuard.reason}</p>
+                    </div>
+                  </div>
+                )}
+                <div className="mb-2 flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+                  <span className="inline-flex items-center gap-1 font-medium">
+                    <ShieldCheck className="size-3 text-emerald-600" />
+                    Escrow Protected Chat · Phone numbers, emails & UPI links are disabled
+                  </span>
+                </div>
                 <div className="mb-2 flex gap-2 overflow-x-auto pb-1">
                   {QUICK_TEMPLATES.map((t) => (
                     <button
@@ -467,13 +491,16 @@ function Messages() {
                       }
                     }}
                     placeholder={`Reply to ${activeInquiry.creator_name}…`}
-                    className="h-11 rounded-xl text-xs"
+                    className={cn(
+                      "h-11 rounded-xl text-xs",
+                      contactGuard.isBlocked && "border-destructive focus-visible:ring-destructive",
+                    )}
                     disabled={sendMutation.isPending}
                   />
                   <Button
                     className="rounded-xl"
                     onClick={handleSend}
-                    disabled={!draft.trim() || sendMutation.isPending}
+                    disabled={!draft.trim() || sendMutation.isPending || contactGuard.isBlocked}
                   >
                     <Send className="size-4" />
                     <span className="hidden sm:inline">
