@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { currentBusiness } from "@/data/mock";
 import { useAuth } from "@/lib/auth-context";
-import { updateBusinessProfile } from "@/lib/business-api";
+import { updateBusinessProfile, type BusinessProfileData } from "@/lib/business-api";
 
 export const Route = createFileRoute("/business-profile")({
   head: () => ({
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/business-profile")({
 
 function BusinessProfile() {
   const { business, refreshProfile } = useAuth();
-  const [form, setForm] = useState({ ...currentBusiness });
+  const [form, setForm] = useState({ ...currentBusiness, handle: "" });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ function BusinessProfile() {
       setForm((prev) => ({
         ...prev,
         name: business.company_name || prev.name,
+        handle: business.handle || prev.handle,
         type: business.business_type || prev.type,
         description: business.about || prev.description,
         email: business.contact_email || prev.email,
@@ -57,12 +58,13 @@ function BusinessProfile() {
     try {
       await updateBusinessProfile({
         company_name: form.name,
+        ...(form.handle ? { handle: form.handle } : {}),
         business_type: form.type,
         about: form.description,
         contact_name: form.contactPerson,
         contact_email: form.email,
         contact_phone: form.phone,
-      });
+      } as Partial<BusinessProfileData>);
       await refreshProfile();
       toast.success("Business profile updated successfully!");
     } catch (e: any) {
@@ -103,6 +105,16 @@ function BusinessProfile() {
                 id="name"
                 value={form.name}
                 onChange={(e) => set("name", e.target.value)}
+                className="mt-1.5 rounded-xl"
+              />
+            </div>
+            <div>
+              <Label htmlFor="handle">Public @handle (for mentions & Collabs)</Label>
+              <Input
+                id="handle"
+                placeholder="cafe_aroma_kochi"
+                value={form.handle}
+                onChange={(e) => set("handle", e.target.value.replace(/^@/, ""))}
                 className="mt-1.5 rounded-xl"
               />
             </div>

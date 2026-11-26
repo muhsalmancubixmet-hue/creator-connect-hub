@@ -16,6 +16,7 @@ import type { Creator } from "@/data/mock";
 export interface BusinessProfileData {
   id: string;
   company_name: string;
+  handle?: string;
   business_type: string;
   contact_name: string;
   contact_email: string;

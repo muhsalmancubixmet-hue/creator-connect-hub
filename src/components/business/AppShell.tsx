@@ -9,6 +9,7 @@ import {
   Compass,
   CreditCard,
   FileText,
+  Film,
   LayoutDashboard,
   LogOut,
   Megaphone,
@@ -64,6 +65,7 @@ import {
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/discover", label: "Discover Influencers", icon: Compass },
+  { to: "/posts", label: "Posts & Collabs", icon: Film },
   { to: "/shortlists", label: "Shortlists", icon: Bookmark },
   { to: "/requirements", label: "Requirements", icon: FileText },
   { to: "/campaigns", label: "Campaigns", icon: Megaphone },

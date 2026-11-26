@@ -17,6 +17,7 @@ import { Route as DiscoverRouteImport } from './routes/discover'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as PostsRouteImport } from './routes/posts'
 import { Route as SavedSearchesRouteImport } from './routes/saved-searches'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -68,6 +69,11 @@ const MessagesRoute = MessagesRouteImport.update({
 const NotificationsRoute = NotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostsRoute = PostsRouteImport.update({
+  id: '/posts',
+  path: '/posts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SavedSearchesRoute = SavedSearchesRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/posts': typeof PostsRoute
   '/saved-searches': typeof SavedSearchesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/posts': typeof PostsRoute
   '/saved-searches': typeof SavedSearchesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/messages': typeof MessagesRoute
   '/notifications': typeof NotificationsRoute
+  '/posts': typeof PostsRoute
   '/saved-searches': typeof SavedSearchesRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/messages'
     | '/notifications'
+    | '/posts'
     | '/saved-searches'
     | '/settings'
     | '/signup'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/messages'
     | '/notifications'
+    | '/posts'
     | '/saved-searches'
     | '/settings'
     | '/signup'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/messages'
     | '/notifications'
+    | '/posts'
     | '/saved-searches'
     | '/settings'
     | '/signup'
@@ -277,6 +289,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MessagesRoute: typeof MessagesRoute
   NotificationsRoute: typeof NotificationsRoute
+  PostsRoute: typeof PostsRoute
   SavedSearchesRoute: typeof SavedSearchesRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
@@ -347,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/posts': {
+      id: '/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/saved-searches': {
@@ -445,6 +465,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MessagesRoute: MessagesRoute,
   NotificationsRoute: NotificationsRoute,
+  PostsRoute: PostsRoute,
   SavedSearchesRoute: SavedSearchesRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
